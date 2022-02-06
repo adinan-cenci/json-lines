@@ -1,6 +1,9 @@
 <?php 
 namespace AdinanCenci\JsonLines\Generic;
 
+use AdinanCenci\JsonLines\Exception\FileDoesNotExist;
+use AdinanCenci\JsonLines\Exception\FileIsNotReadable;
+
 class ReadFile 
 {
     protected $fileName;
@@ -16,7 +19,7 @@ class ReadFile
     public function read() 
     {
         $entries  = $this->getExistingLines();
-        $return   = [];
+        $return   = array_combine($this->lines, array_fill(0, count($this->lines), null));
 
         foreach ($entries as $lineKey => $line) {
             if (in_array($lineKey, $this->lines)) {
@@ -35,11 +38,11 @@ class ReadFile
     protected function validateFileForReading() 
     {
         if (! file_exists($this->fileName)) {
-            throw new \Exception('File ' . $this->fileName . ' does not exist.');
+            throw new FileDoesNotExist($this->fileName);
         }
 
         if (! is_writable($this->fileName)) {
-            throw new \Exception('File ' . $this->fileName . ' is not writable.');
+            throw new FileIsNotReadable($this->fileName);
         }
     }
 }

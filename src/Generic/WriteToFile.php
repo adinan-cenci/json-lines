@@ -1,6 +1,10 @@
 <?php 
 namespace AdinanCenci\JsonLines\Generic;
 
+use AdinanCenci\JsonLines\Exception\DirectoryDoesNotExist;
+use AdinanCenci\JsonLines\Exception\DirectoryIsNotWritable;
+use AdinanCenci\JsonLines\Exception\FileIsNotWritable;
+
 class WriteToFile 
 {
     protected $fileName;
@@ -66,36 +70,18 @@ class WriteToFile
 
     protected function validateFileForWriting() 
     {
-        if (file_exists($this->fileName)) {
-            $this->validateDirectoryForWriting();
+        $dir = dirname($this->fileName) . '/';
+
+        if (!file_exists($this->fileName) && !file_exists($dir)) {
+            throw new DirectoryDoesNotExist($dir);
         }
 
-        if (! $this->fileIsWritable()) {
-            throw new \Exception('File not writable');
+        if (!file_exists($this->fileName) && file_exists($dir) && !is_writable($dir)) {
+            throw new DirectoryIsNotWritable($dir);
         }
-    }
 
-    protected function validateDirectoryForWriting() 
-    {
-        if (! $this->directoryIsWritable()) {
-            throw new \Exception('Directory not writable');
+        if (file_exists($this->fileName) && !is_writable($this->fileName)) {
+            throw new FileIsNotWritable($this->fileName);
         }
-    }
-
-    protected function fileIsWritable() 
-    {
-        return file_exists($this->fileName) ? 
-            is_writable($this->fileName) : 
-            is_writable($this->getDirectory());
-    }
-
-    protected function directoryIsWritable() 
-    {
-        return is_writable($this->getDirectory());
-    }
-
-    protected function getDirectory() 
-    {
-        return dirname($this->fileName) . '/';
     }
 }

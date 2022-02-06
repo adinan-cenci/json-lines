@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '7c986e341197c5446f5052b1d8dd29ff576a57a9',
+        'reference' => 'b6baf3f4a7dddcc546e1456d215b4f93d7a3f688',
         'name' => 'adinan-cenci/json-lines',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '7c986e341197c5446f5052b1d8dd29ff576a57a9',
+            'reference' => 'b6baf3f4a7dddcc546e1456d215b4f93d7a3f688',
             'dev_requirement' => false,
         ),
         'doctrine/instantiator' => array(

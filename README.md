@@ -61,6 +61,7 @@ $object = $file->getObject($line);
 ```
 
 Returns `null` if the entry does not exist or the json is invalid.
+
 <br><br>
 
 **Retrieve multiple objects**
