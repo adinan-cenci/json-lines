@@ -2,12 +2,11 @@
 
 A library to read and write files in the [json lines](https://jsonlines.org/) format.
 
-<br><br>
+<br>
 
 ## How to use it
 
-**Instantiate**
-
+**Instantiating**
 ```php
 use AdinanCenci\JsonLines\JsonLines;
 
@@ -19,19 +18,17 @@ $file = new JsonLines('my-file.jsonl', $associative);
 
 <br><br>
 
-**Iterate**
-
+**Iterating**
 ```php
 foreach ($file->objects as $key => $object) {
     echo $object->myProperty . '<br>';
-    // or $object['myProperty'] if ::associative is true.
+    // or $object['myProperty'] if ::$associative is true.
 }
 ```
 
 <br><br>
 
 **Set an object**
-
 ```php
 $line   = 10;
 $object = ['foo' => 'bar'];
@@ -44,8 +41,7 @@ If the file has less than `$line` entries, the gap will be filled with blank lin
 
 <br><br>
 
-**Set multiples**
-
+**Set multiple objects**
 ```php
 $objects = [
 // line => object
@@ -59,17 +55,15 @@ $objects->setObjects($objects);
 <br><br>
 
 **Retrieve object**
-
 ```php
 $line   = 10;
 $object = $file->getObject($line);
 ```
 
-Returns null if the entry does not exist.
+Returns `null` if the entry does not exist or the json is invalid.
 <br><br>
 
-**Retrieve multiples**
-
+**Retrieve multiple objects**
 ```php
 $lines   = [0, 1, 2];
 $objects = $file->getObjects($lines);
@@ -78,7 +72,8 @@ $objects = $file->getObjects($lines);
 <br><br>
 
 ## License
-
 MIT
+
+<br><br>
 
 ## How to install it

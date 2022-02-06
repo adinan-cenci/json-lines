@@ -20,5 +20,8 @@
             "AdinanCenci\\JsonLines\\": "src/",
             "AdinanCenci\\JsonLines\\Generic\\": "src/Generic/"
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
     }
 }
