@@ -28,6 +28,9 @@ class JsonLines extends File
     /**
      * @param string $line
      * @param array|object $object
+     * @throws DirectoryDoesNotExist
+     * @throws DirectoryIsNotWritable
+     * @throws FileIsNotWritable
      */
     public function setObject($line, $object) 
     {
@@ -36,6 +39,9 @@ class JsonLines extends File
 
     /**
      * @param array $objects An numerical array: [ line => object ].
+     * @throws DirectoryDoesNotExist
+     * @throws DirectoryIsNotWritable
+     * @throws FileIsNotWritable
      */
     public function setObjects($objects) 
     {
@@ -50,6 +56,8 @@ class JsonLines extends File
     /**
      * @param int $line
      * @return array|object|null
+     * @throws FileDoesNotExist
+     * @throws FileIsNotReadable
      */
     public function getObject($line) 
     {
@@ -60,6 +68,8 @@ class JsonLines extends File
     /**
      * @param int[] $lines
      * @return (array|object|null)[]
+     * @throws FileDoesNotExist
+     * @throws FileIsNotReadable
      */
     public function getObjects($lines)
     {
@@ -71,6 +81,26 @@ class JsonLines extends File
         });
 
         return $entries;
+    }
+
+    /**
+     * @param int[] $lines
+     * @throws FileDoesNotExist
+     * @throws FileIsNotReadable
+     */
+    public function deleteObjects($lines) 
+    {
+        return $this->deleteLines($lines);
+    }
+
+    /**
+     * @param int $line
+     * @throws FileDoesNotExist
+     * @throws FileIsNotReadable
+     */
+    public function deleteObject($line) 
+    {
+        return $this->deleteLine($lines);
     }
 
     public function search() 

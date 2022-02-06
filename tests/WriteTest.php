@@ -44,4 +44,22 @@ final class WriteTest extends TestCase
 {"bar":"foo"}
 ', file_get_contents($path));
     }
+
+    public function testWriteFileWithGaps() 
+    {
+        $path = './tests/testWriteFileWithGaps.jsonl';
+        $file = new JsonLines($path);
+        $file->setObjects([
+            0 => ['foo' => 'bar'],
+            1 => ['bar' => 'foo'],
+            4 => ['baz' => 'barfoo']
+        ]);
+        
+        $this->assertEquals('{"foo":"bar"}
+{"bar":"foo"}
+
+
+{"baz":"barfoo"}
+', file_get_contents($path));
+    }
 }

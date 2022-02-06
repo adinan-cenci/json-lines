@@ -30,7 +30,10 @@ class File
 
     /**
      * @param integer $line
-     * @param string $content
+     * @param string $content 
+     * @throws DirectoryDoesNotExist
+     * @throws DirectoryIsNotWritable
+     * @throws FileIsNotWritable
      */
     public function setLine($line, $content) 
     {
@@ -39,6 +42,9 @@ class File
 
     /**
      * @param string[] $lines An numerical array: [ lineNumber => content ].
+     * @throws DirectoryDoesNotExist
+     * @throws DirectoryIsNotWritable
+     * @throws FileIsNotWritable
      */
     public function setLines($lines) 
     {
@@ -49,6 +55,8 @@ class File
     /**
      * @param int $line
      * @return string|null
+     * @throws FileDoesNotExist
+     * @throws FileIsNotReadable
      */
     public function getLine($line) 
     {
@@ -59,10 +67,33 @@ class File
     /**
      * @param int[] $lines
      * @return (string|null)[]
+     * @throws FileDoesNotExist
+     * @throws FileIsNotReadable
      */
     public function getLines($lines) 
     {
         $read = new ReadFile($this->fileName, $lines);
         return $read->read();
+    }
+
+    /**
+     * @param int[] $lines
+     * @throws FileDoesNotExist
+     * @throws FileIsNotReadable
+     */
+    public function deleteLines($lines) 
+    {
+        $delete = new RemoveFromFile($this->fileName, $lines);
+        return $delete->remove();
+    }
+
+    /**
+     * @param int $line
+     * @throws FileDoesNotExist
+     * @throws FileIsNotReadable
+     */
+    public function deleteLine($line) 
+    {
+        return $this->deleteLines([$line]);
     }
 }
