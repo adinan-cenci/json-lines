@@ -1,0 +1,24 @@
+{
+    "name": "adinan-cenci/json-lines",
+    "description": "A library to read and write json-lines.", 
+    "type": "library", 
+    "keywords": ["json-lines", "json"], 
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adinan Cenci",
+            "email": "adinancenci@protonmail.com", 
+            "role": "developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "guzzlehttp/guzzle": "^7.4" 
+    }, 
+    "autoload": {
+        "psr-4": {
+            "AdinanCenci\\JsonLines\\": "src/",
+            "AdinanCenci\\JsonLines\\Generic\\": "src/Generic/"
+        }
+    }
+}
