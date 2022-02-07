@@ -22,7 +22,7 @@ class RemoveFromFile
         $tempFile   = fopen($tempName, 'w');
         $iterator   = $this->getExistingLines();
         $lineN      = 0;
-        
+
         foreach ($iterator as $lineKey => $line) {
             $newContent = in_array($lineKey, $this->lines) ?
                 '' : 
@@ -47,7 +47,7 @@ class RemoveFromFile
     protected function validateFileForDeleting() 
     {
         if (!file_exists($this->fileName)) {
-            throw new FileDoesNotExist($this->fileName));
+            throw new FileDoesNotExist($this->fileName);
         }
 
         if (!is_writable($this->fileName)) {

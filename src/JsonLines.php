@@ -105,7 +105,7 @@ class JsonLines extends File
 
     public function search() 
     {
-        return new JsonLinesSearch($this);
+        return new Search($this);
     }
 
     public static function jsonDecode($json, $associative = false, $lineNumber) 

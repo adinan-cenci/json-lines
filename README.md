@@ -1,6 +1,6 @@
 # Json lines
-
 A library to read and write files in the [json lines](https://jsonlines.org/) format.
+**Note**: Still in early development.
 
 <br>
 
@@ -72,9 +72,29 @@ $objects = $file->getObjects($lines);
 
 <br><br>
 
+**Delete objects**
+```php
+$line = 10;
+$file->deleteObject($line);
+```
+
+<br><br>
+
+**Delete multiple objects**
+```php
+$lines = [0, 1, 2];
+$file->deleteObjects($lines);
+```
+
+<br><br>
+
 ## License
 MIT
 
 <br><br>
 
 ## How to install it
+Use composer.
+```
+composer require adinan-cenci/json-lines
+```
