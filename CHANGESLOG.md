@@ -6,4 +6,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-02-07
 ### Fixed
-Removed the contents from the `vendor/` folder.
+Removed `composer.lock` and the contents from the `vendor/` folder.
