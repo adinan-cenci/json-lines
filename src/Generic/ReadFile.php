@@ -8,16 +8,28 @@ class ReadFile
 {
     protected $fileName;
     protected $lines;
+    protected $error = null;
 
     public function __construct(string $fileName, $lines) 
     {
         $this->fileName = $fileName;
         $this->lines    = $lines;
-        $this->validateFileForReading();
+
+        try {
+            $this->validateFileForReading();
+        } catch (\Exception $e) {
+            $this->erro = $e;
+            throw $e;
+        }
     }
 
     public function read() 
     {
+        if ($this->error) {
+            throw $this->error;
+            return;
+        }
+
         $entries  = $this->getExistingLines();
         $return   = array_combine($this->lines, array_fill(0, count($this->lines), null));
 
@@ -41,7 +53,7 @@ class ReadFile
             throw new FileDoesNotExist($this->fileName);
         }
 
-        if (! is_writable($this->fileName)) {
+        if (! is_readable($this->fileName)) {
             throw new FileIsNotReadable($this->fileName);
         }
     }

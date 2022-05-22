@@ -4,6 +4,8 @@ namespace AdinanCenci\JsonLines\Generic;
 /**
  * @property FileIterator $lines
  * @property string $fileName
+ * @property \Iterator $lines Iterator object to read the file line by line.
+ * @property int $lineCount The number of lines in the file.
  */
 class File 
 {
@@ -23,13 +25,31 @@ class File
             case 'fileName':
                 return new $this->fileName;
                 break;
+            case 'lineCount':
+                return $this->countLines();
+                break;
         }
 
         return null;
     }
 
     /**
-     * @param integer $line
+     * Add contents to the end of the file.
+     * 
+     * @param string $content 
+     * @throws DirectoryDoesNotExist
+     * @throws DirectoryIsNotWritable
+     * @throws FileIsNotWritable
+     */
+    public function addLine($content) 
+    {
+        $lastLine = $this->countLines();
+        $lastLine = $lastLine == 0 ? $lastLine : $lastLine - 1;
+        $this->setLine($lastLine, $content);
+    }
+
+    /**
+     * @param int $line
      * @param string $content 
      * @throws DirectoryDoesNotExist
      * @throws DirectoryIsNotWritable
@@ -41,7 +61,7 @@ class File
     }
 
     /**
-     * @param string[] $lines An numerical array: [ lineNumber => content ].
+     * @param string[] $lines A numerical array: [ lineNumber => content ].
      * @throws DirectoryDoesNotExist
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
@@ -95,5 +115,23 @@ class File
     public function deleteLine($line) 
     {
         return $this->deleteLines([$line]);
+    }
+
+    public function countLines() 
+    {
+        if (! file_exists($this->fileName)) {
+            return 0;
+        }
+
+        $handle = fopen($this->fileName, "r");
+        $lineCount = 1;
+  
+        while(! feof($handle)){
+            $line = fgets($handle, 4096);
+            $lineCount = $lineCount + substr_count($line, PHP_EOL);
+        }
+
+        fclose($handle);
+        return $lineCount;
     }
 }

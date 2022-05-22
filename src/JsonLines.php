@@ -4,7 +4,7 @@ namespace AdinanCenci\JsonLines;
 use AdinanCenci\JsonLines\Generic\File;
 
 /**
- * @property object[] $objects
+ * @property \Iterator $objects
  */
 class JsonLines extends File 
 {
@@ -26,7 +26,23 @@ class JsonLines extends File
     }
 
     /**
-     * @param string $line
+     * Adds an object to the end of the file.
+     * 
+     * @param int $line
+     * @param array|object $object
+     * @throws DirectoryDoesNotExist
+     * @throws DirectoryIsNotWritable
+     * @throws FileIsNotWritable
+     */
+    public function addObject($object) 
+    {
+        $lastLine = $this->countLines();
+        $lastLine = $lastLine == 0 ? $lastLine : $lastLine - 1;
+        $this->setObject($lastLine, $object);
+    }
+
+    /**
+     * @param int $line
      * @param array|object $object
      * @throws DirectoryDoesNotExist
      * @throws DirectoryIsNotWritable
@@ -38,7 +54,7 @@ class JsonLines extends File
     }
 
     /**
-     * @param array $objects An numerical array: [ line => object ].
+     * @param array $objects An numerical array: [ lineNumber => object ].
      * @throws DirectoryDoesNotExist
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable

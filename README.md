@@ -20,10 +20,18 @@ $file = new JsonLines('my-file.jsonl', $associative);
 
 **Iterating**
 ```php
-foreach ($file->objects as $key => $object) {
+foreach ($file->objects as $line => $object) {
     echo $object->myProperty . '<br>';
     // or $object['myProperty'] if ::$associative is true.
 }
+```
+
+<br><br>
+
+**Add an object to the end of the file**
+```php
+$object = ['foo' => 'bar'];
+$file->addObject($object);
 ```
 
 <br><br>
@@ -37,7 +45,7 @@ $file->setObject($line, $object);
 
 If the file has less than `$line` entries, the gap will be filled with blank lines.
 
-`$object` does not need to be an array, it also may be an object. 
+`$object` does not need to be an array, it also may be an actual object. 
 
 <br><br>
 
@@ -60,7 +68,7 @@ $line   = 10;
 $object = $file->getObject($line);
 ```
 
-Returns `null` if the entry does not exist or the json is invalid.
+Returns `null` if the entry does not exist or if the json is invalid.
 
 <br><br>
 

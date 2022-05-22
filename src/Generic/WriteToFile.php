@@ -9,17 +9,29 @@ class WriteToFile
 {
     protected $fileName;
     protected $lines;
+    protected $error = null;
 
     public function __construct(string $fileName, $lines) 
     {
         $this->fileName = $fileName;
         $this->lines    = $lines;
         ksort($this->lines);
-        $this->validateFileForWriting();
+
+        try {
+            $this->validateFileForWriting();
+        } catch (\Exception $e) {
+            $this->erro = $e;
+            throw $e;
+        }
     }
 
     public function writeDown() 
     {
+        if ($this->error) {
+            throw $this->error;
+            return;
+        }
+
         $tempName   = uniqid() . '.tmp';
         $tempFile   = fopen($tempName, 'w');
         $iterator   = $this->getExistingLines();
@@ -52,7 +64,12 @@ class WriteToFile
         if (file_exists($this->fileName)) {
             unlink($this->fileName);
         }
-        rename($tempName, $this->fileName);
+
+        $success = rename($tempName, $this->fileName);
+
+        if (! $success) {
+            unlink($tempFile);
+        }
     }
 
     protected function getExistingLines() 
@@ -72,11 +89,11 @@ class WriteToFile
     {
         $dir = dirname($this->fileName) . '/';
 
-        if (!file_exists($this->fileName) && !file_exists($dir)) {
+        if (!file_exists($dir)) {
             throw new DirectoryDoesNotExist($dir);
         }
 
-        if (!file_exists($this->fileName) && file_exists($dir) && !is_writable($dir)) {
+        if (!is_writable($dir)) {
             throw new DirectoryIsNotWritable($dir);
         }
 
