@@ -29,6 +29,10 @@ class FileIterator implements \Iterator
 
     public function next() 
     {
+        if (! $this->getHandle()) {
+            return;
+        }
+
         $this->currentLine = fgets($this->handle);
         $this->currentLineNumber++;
         return $this->currentLine;

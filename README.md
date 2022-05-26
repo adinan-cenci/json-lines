@@ -29,9 +29,38 @@ foreach ($file->objects as $line => $object) {
 <br><br>
 
 **Add an object to the end of the file**
+
 ```php
 $object = ['foo' => 'bar'];
 $file->addObject($object);
+```
+
+`$object` does not need to be an array, it also may be an actual object. 
+
+<br><br>
+
+**Add an object to the middle of the file**
+
+```php
+$line = 5;
+$object = ['foo' => 'bar'];
+$file->addObject($line, $object);
+```
+
+If the file has less than `$line` lines, the gap will be filled with blank lines.
+
+<br><br>
+
+**Add several objects**
+
+```php
+$objects = [
+// line => object
+    0 => ['name' => 'foo'],
+    5 => ['name' => 'bar'],
+];
+
+$objects->addObjects($objects);
 ```
 
 <br><br>
@@ -43,9 +72,7 @@ $object = ['foo' => 'bar'];
 $file->setObject($line, $object);
 ```
 
-If the file has less than `$line` entries, the gap will be filled with blank lines.
-
-`$object` does not need to be an array, it also may be an actual object. 
+The difference between `::addObject()` and `::setObject()` is that setObject will overwrite whatever is already present at line `$line`. 
 
 <br><br>
 
@@ -92,6 +119,24 @@ $file->deleteObject($line);
 ```php
 $lines = [0, 1, 2];
 $file->deleteObjects($lines);
+```
+
+<br><br>
+
+## Search
+
+```php
+$search = $file->search();
+
+$search->equals('id', 1);
+
+// case insensitive
+$search->includes('name', 'foo bar');
+
+// like ::includes() but it will include inexact matches like "foo bar" or "bar foo"
+$search->like('name', 'foo'); 
+
+$objects = $search->find();
 ```
 
 <br><br>

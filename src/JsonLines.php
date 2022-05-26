@@ -34,11 +34,35 @@ class JsonLines extends File
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function addObject($object) 
+    public function addObject($line = null, $object = null) 
     {
-        $lastLine = $this->countLines();
-        $lastLine = $lastLine == 0 ? $lastLine : $lastLine - 1;
-        $this->setObject($lastLine, $object);
+        $args = func_get_args();
+        if (count($args) == 2) {
+            $line = $args[0];
+            $object = $args[1];
+        } else {
+            $line = $this->countLines($lastLineEmpty);
+            $line -= $lastLineEmpty ? 1 : 0;
+            $object = $args[0];
+        }
+
+        $this->addObjects([$line => $object]);
+    }
+
+    /**
+     * @param array $objects An numerical array: [ lineNumber => object ].
+     * @throws DirectoryDoesNotExist
+     * @throws DirectoryIsNotWritable
+     * @throws FileIsNotWritable
+     */
+    public function addObjects($objects) 
+    {
+        array_walk($objects, function(&$object) 
+        {
+            $object = json_encode($object);
+        });
+
+        $this->addLines($objects);
     }
 
     /**
@@ -114,9 +138,9 @@ class JsonLines extends File
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
-    public function deleteObject($line) 
+    public function deleteObject($lines) 
     {
-        return $this->deleteLine($lines);
+        return $this->deleteLine([$lines]);
     }
 
     public function search() 

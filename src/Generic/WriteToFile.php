@@ -7,15 +7,19 @@ use AdinanCenci\JsonLines\Exception\FileIsNotWritable;
 
 class WriteToFile 
 {
-    protected $fileName;
-    protected $lines;
-    protected $error = null;
+    protected $fileName = null;
+    protected $newLines = null;
+    protected $error    = null;
 
-    public function __construct(string $fileName, $lines) 
+    protected $tmpName  = null;
+    protected $tempFile = null;
+    protected $iterator = null;
+
+    public function __construct(string $fileName, $newLines) 
     {
         $this->fileName = $fileName;
-        $this->lines    = $lines;
-        ksort($this->lines);
+        $this->newLines = $newLines;
+        ksort($this->newLines);
 
         try {
             $this->validateFileForWriting();
@@ -32,43 +36,45 @@ class WriteToFile
             return;
         }
 
-        $tempName   = uniqid() . '.tmp';
-        $tempFile   = fopen($tempName, 'w');
-        $iterator   = $this->getExistingLines();
-        $lineN      = 0;
+        $this->tempName   = uniqid() . '.tmp';
+        $this->tempFile   = fopen($this->tempName, 'w');
+        $this->iterator   = $this->getExistingLines();
         
-        foreach ($iterator as $lineKey => $line) {
-            $newContent = empty($this->lines[$lineKey]) ? 
-                $line : 
-                $this->lines[$lineKey];
+        $this->run();
 
-            $newContent = $this->sanitizeLine($newContent);
-            fwrite($tempFile, $newContent);
-            $lineN++;
-        }
-        
-        $keys = array_keys($this->lines);
-        $lastOne = end($keys);
-
-        while ($lineN <= $lastOne) {
-            $newContent = empty($this->lines[$lineN]) ? 
-                '' : 
-                $this->lines[$lineN];
-
-            $newContent = $this->sanitizeLine($newContent);
-            fwrite($tempFile, $newContent);
-            $lineN++;
-        }
-
-        fclose($tempFile);
+        fclose($this->tempFile);
         if (file_exists($this->fileName)) {
             unlink($this->fileName);
         }
 
-        $success = rename($tempName, $this->fileName);
+        rename($this->tempName, $this->fileName);
+    }
 
-        if (! $success) {
-            unlink($tempFile);
+    protected function run() 
+    {
+        $lineN = 0;
+        
+        foreach ($this->iterator as $lineKey => $line) {
+            $newContent = empty($this->newLines[$lineKey]) ? 
+                $line : 
+                $this->newLines[$lineKey];
+
+            $newContent = $this->sanitizeLine($newContent);
+            fwrite($this->tempFile, $newContent);
+            $lineN++;
+        }
+        
+        $keys = array_keys($this->newLines);
+        $lastOne = end($keys);
+
+        while ($lineN <= $lastOne) {
+            $newContent = empty($this->newLines[$lineN]) ? 
+                '' : 
+                $this->newLines[$lineN];
+
+            $newContent = $this->sanitizeLine($newContent);
+            fwrite($this->tempFile, $newContent);
+            $lineN++;
         }
     }
 

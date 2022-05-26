@@ -40,6 +40,17 @@ class Search
         return $this;
     }
 
+    public function equals($field, $value) 
+    {
+        $this->conditions[] = [
+            'operator' => 'equals', 
+            'field'    => $field, 
+            'value'    => $value
+        ];
+
+        return $this;
+    }
+
     protected function execute() 
     {
         foreach($this->jsonLines->objects as $line => $obj) {
@@ -71,6 +82,12 @@ class Search
 
         if ($cond['operator'] == 'likes') {
             if (! $this->matchLikesOperator($obj, $cond['field'], $cond['value'])) {
+                return false;
+            }
+        }
+
+        if ($cond['operator'] == 'equals') {
+            if (! $this->matchEqualsOperator($obj, $cond['field'], $cond['value'])) {
                 return false;
             }
         }
@@ -114,6 +131,15 @@ class Search
         }
 
         return false;
+    }
+
+    protected function matchEqualsOperator($obj, $field, $value) 
+    {
+        if (!$objValue = $this->getValue($obj, $field)) {
+            return false;
+        }
+
+        return $objValue == $value;
     }
 
     protected function getValue($object, $field) 

@@ -34,21 +34,6 @@ class File
     }
 
     /**
-     * Add contents to the end of the file.
-     * 
-     * @param string $content 
-     * @throws DirectoryDoesNotExist
-     * @throws DirectoryIsNotWritable
-     * @throws FileIsNotWritable
-     */
-    public function addLine($content) 
-    {
-        $lastLine = $this->countLines();
-        $lastLine = $lastLine == 0 ? $lastLine : $lastLine - 1;
-        $this->setLine($lastLine, $content);
-    }
-
-    /**
      * @param int $line
      * @param string $content 
      * @throws DirectoryDoesNotExist
@@ -69,6 +54,40 @@ class File
     public function setLines($lines) 
     {
         $write = new WriteToFile($this->fileName, $lines);
+        $write->writeDown();
+    }
+
+    /**
+     * @param int $line Optional
+     * @param string $content 
+     * @throws DirectoryDoesNotExist
+     * @throws DirectoryIsNotWritable
+     * @throws FileIsNotWritable
+     */
+    public function addLine($line = null, $content = null) 
+    {
+        $args = func_get_args();
+        if (count($args) == 2) {
+            $line = $args[0];
+            $content = $args[1];
+        } else {
+            $line = $this->countLines($lastLineEmpty);
+            $line -= $lastLineEmpty ? 1 : 0;
+            $content = $args[0];
+        }
+
+        $this->addLines([$line => $content]);
+    }
+
+    /**
+     * @param string[] $lines A numerical array: [ lineNumber => content ].
+     * @throws DirectoryDoesNotExist
+     * @throws DirectoryIsNotWritable
+     * @throws FileIsNotWritable
+     */
+    public function addLines($lines) 
+    {
+        $write = new AddToFile($this->fileName, $lines);
         $write->writeDown();
     }
 
@@ -117,7 +136,7 @@ class File
         return $this->deleteLines([$line]);
     }
 
-    public function countLines() 
+    public function countLines(&$emptyLastLine = false) 
     {
         if (! file_exists($this->fileName)) {
             return 0;
@@ -130,6 +149,8 @@ class File
             $line = fgets($handle, 4096);
             $lineCount = $lineCount + substr_count($line, PHP_EOL);
         }
+
+        $emptyLastLine = strlen($line) == 0;
 
         fclose($handle);
         return $lineCount;
