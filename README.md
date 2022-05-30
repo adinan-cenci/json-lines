@@ -44,7 +44,7 @@ $file->addObject($object);
 ```php
 $line = 5;
 $object = ['foo' => 'bar'];
-$file->addObject($line, $object);
+$file->addObject($object, $line);
 ```
 
 If the file has less than `$line` lines, the gap will be filled with blank lines.

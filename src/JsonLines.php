@@ -10,7 +10,7 @@ class JsonLines extends File
 {
     protected $associative = false;
 
-    public function __construct($fileName, $associative = false) 
+    public function __construct(string $fileName, bool $associative = false) 
     {
         parent::__construct($fileName);
         $this->associative = $associative;
@@ -28,22 +28,17 @@ class JsonLines extends File
     /**
      * Adds an object to the end of the file.
      * 
-     * @param int $line
      * @param array|object $object
+     * @param int $line Optional
      * @throws DirectoryDoesNotExist
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function addObject($line = null, $object = null) 
+    public function addObject($object, ?int $line = null) : void
     {
-        $args = func_get_args();
-        if (count($args) == 2) {
-            $line = $args[0];
-            $object = $args[1];
-        } else {
+        if ($line === null) {
             $line = $this->countLines($lastLineEmpty);
-            $line -= $lastLineEmpty ? 1 : 0;
-            $object = $args[0];
+            $line -= $lastLineEmpty && $line > 0 ? 1 : 0;
         }
 
         $this->addObjects([$line => $object]);
@@ -55,7 +50,7 @@ class JsonLines extends File
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function addObjects($objects) 
+    public function addObjects(array $objects) : void
     {
         array_walk($objects, function(&$object) 
         {
@@ -72,7 +67,7 @@ class JsonLines extends File
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function setObject($line, $object) 
+    public function setObject(int $line, $object) : void
     {
         $this->setObjects([$line => $object]);
     }
@@ -83,7 +78,7 @@ class JsonLines extends File
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function setObjects($objects) 
+    public function setObjects(array $objects) : void
     {
         array_walk($objects, function(&$object) 
         {
@@ -99,7 +94,7 @@ class JsonLines extends File
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
-    public function getObject($line) 
+    public function getObject(int $line) 
     {
         $result = $this->getObjects([$line]);
         return reset($result);
@@ -111,7 +106,7 @@ class JsonLines extends File
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
-    public function getObjects($lines)
+    public function getObjects(array $lines) : array
     {
         $entries = $this->getLines($lines);
         $associative = $this->associative;
@@ -128,9 +123,9 @@ class JsonLines extends File
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
-    public function deleteObjects($lines) 
+    public function deleteObjects(array $lines) : void
     {
-        return $this->deleteLines($lines);
+        $this->deleteLines($lines);
     }
 
     /**
@@ -138,17 +133,17 @@ class JsonLines extends File
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
-    public function deleteObject($lines) 
+    public function deleteObject(int $line) : void
     {
-        return $this->deleteLine([$lines]);
+        $this->deleteLine($line);
     }
 
-    public function search() 
+    public function search() : Search
     {
         return new Search($this);
     }
 
-    public static function jsonDecode($json, $associative = false, $lineNumber) 
+    public static function jsonDecode(?string $json, bool $associative = false, int $lineNumber) 
     {
         $json = rtrim($json, "\n");
 

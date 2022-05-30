@@ -2,9 +2,8 @@
 namespace AdinanCenci\JsonLines\Generic;
 
 /**
- * @property FileIterator $lines
+ * @property FileIterator $lines Iterator object to read the file line by line.
  * @property string $fileName
- * @property \Iterator $lines Iterator object to read the file line by line.
  * @property int $lineCount The number of lines in the file.
  */
 class File 
@@ -34,46 +33,22 @@ class File
     }
 
     /**
-     * @param int $line
+     * Will add content to the end of the file if $line is unset.
+     * If $line is set the content will be added to the middle of the file.
+     * If the file has less than $line lines, then the space in between will 
+     * be filled with blank lines.
+     * 
      * @param string $content 
-     * @throws DirectoryDoesNotExist
-     * @throws DirectoryIsNotWritable
-     * @throws FileIsNotWritable
-     */
-    public function setLine($line, $content) 
-    {
-        $this->setLines([$line => $content]);
-    }
-
-    /**
-     * @param string[] $lines A numerical array: [ lineNumber => content ].
-     * @throws DirectoryDoesNotExist
-     * @throws DirectoryIsNotWritable
-     * @throws FileIsNotWritable
-     */
-    public function setLines($lines) 
-    {
-        $write = new WriteToFile($this->fileName, $lines);
-        $write->writeDown();
-    }
-
-    /**
      * @param int $line Optional
-     * @param string $content 
      * @throws DirectoryDoesNotExist
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function addLine($line = null, $content = null) 
+    public function addLine(string $content, ?int $line = null) : void
     {
-        $args = func_get_args();
-        if (count($args) == 2) {
-            $line = $args[0];
-            $content = $args[1];
-        } else {
+        if ($line === null) {
             $line = $this->countLines($lastLineEmpty);
-            $line -= $lastLineEmpty ? 1 : 0;
-            $content = $args[0];
+            $line -= $lastLineEmpty && $line > 0 ? 1 : 0;
         }
 
         $this->addLines([$line => $content]);
@@ -85,22 +60,54 @@ class File
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function addLines($lines) 
+    public function addLines(array $lines) : void
     {
         $write = new AddToFile($this->fileName, $lines);
         $write->writeDown();
     }
 
     /**
+     * Will set the contents for the line $line, overwriting anything 
+     * currently present.
+     * If the file has less than $line lines, then the space in between will 
+     * be filled with blank lines.
+     * 
+     * @param int $line
+     * @param string $content 
+     * @throws DirectoryDoesNotExist
+     * @throws DirectoryIsNotWritable
+     * @throws FileIsNotWritable
+     */
+    public function setLine(int $line, string $content) : void
+    {
+        $this->setLines([$line => $content]);
+    }
+
+    /**
+     * @param string[] $lines A numerical array: [ lineNumber => content ].
+     * @throws DirectoryDoesNotExist
+     * @throws DirectoryIsNotWritable
+     * @throws FileIsNotWritable
+     */
+    public function setLines(array $lines) : void
+    {
+        $write = new WriteToFile($this->fileName, $lines);
+        $write->writeDown();
+    }
+
+    /**
+     * Will return the contents in the $line line.
+     * If the file has less than $line lines, it will return null.
+     * 
      * @param int $line
      * @return string|null
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
-    public function getLine($line) 
+    public function getLine(int $line) : ?string
     {
         $result = $this->getLines([$line]);
-        return reset($result);
+        return $result ? reset($result) : null;
     }
 
     /**
@@ -109,21 +116,10 @@ class File
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
-    public function getLines($lines) 
+    public function getLines(array $lines) : array
     {
         $read = new ReadFile($this->fileName, $lines);
         return $read->read();
-    }
-
-    /**
-     * @param int[] $lines
-     * @throws FileDoesNotExist
-     * @throws FileIsNotReadable
-     */
-    public function deleteLines($lines) 
-    {
-        $delete = new RemoveFromFile($this->fileName, $lines);
-        return $delete->remove();
     }
 
     /**
@@ -131,12 +127,29 @@ class File
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
-    public function deleteLine($line) 
+    public function deleteLine(int $line) : void
     {
-        return $this->deleteLines([$line]);
+        $this->deleteLines([$line]);
     }
 
-    public function countLines(&$emptyLastLine = false) 
+    /**
+     * @param int[] $lines
+     * @throws FileDoesNotExist
+     * @throws FileIsNotReadable
+     */
+    public function deleteLines(array $lines) : void
+    {
+        $delete = new RemoveFromFile($this->fileName, $lines);
+        $delete->remove();
+    }
+
+    /**
+     * If the last line of the file is blank, $emptyLastLine will set to true
+     * 
+     * @param bool $emptyLastLine
+     * @return int
+     */
+    public function countLines(&$emptyLastLine = false) : int
     {
         if (! file_exists($this->fileName)) {
             return 0;
