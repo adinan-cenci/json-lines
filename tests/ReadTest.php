@@ -1,43 +1,33 @@
 <?php
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
-use AdinanCenci\JsonLines\JsonLines;
-use AdinanCenci\JsonLines\Exception\FileDoesNotExist;
-use AdinanCenci\JsonLines\Exception\FileIsNotReadable;
+namespace AdinanCenci\JsonLines\Tests;
 
-final class ReadTest extends TestCase
+use AdinanCenci\JsonLines\Generic\File;
+
+final class ReadTest extends Base
 {
-    public function testReadNonExistentFile() 
+    public function testGetSingleLine() 
     {
-        $file = new JsonLines('./tests/non-existent-file.jsonl');
-        $this->expectException(FileDoesNotExist::class);
-        $entry = $file->getObject(0);
+        $file = new File('tests/template.txt');        
+        $thirLine = $file->getLine(2);
+
+        $this->assertEquals('Halloween', $thirLine);
     }
 
-    public function testReadFileWithoutReadingPermission() 
+    public function testGetNonExistentLine() 
     {
-        $file = new JsonLines('./tests/non-readable-file.jsonl');
-        $this->expectException(FileIsNotReadable::class);
-        $entry = $file->getObject(0);
+        $file = new File('tests/template.txt');        
+        $thirLine = $file->getLine(50);
+
+        $this->assertEquals(null, $thirLine);
     }
 
-    public function testGetNonExistentOject() 
+    public function testGetMultipleLines() 
     {
-        $file = new JsonLines('./tests/readable-file.jsonl');
-        $entries = $file->getObjects([5]);
-
-        $this->assertEquals(null, $entries[5]);
-    }
-
-    public function testGetOjects() 
-    {
-        $file = new JsonLines('./tests/readable-file.jsonl', true);
-        $entries = $file->getObjects([0, 1]);
-
-        $this->assertEquals([
-            0 => ["id" => 0, "name" => "foo"],
-            1 => ["id" => 1, "name" => "bar"]
-        ], $entries);
+        $file = new File('tests/template.txt');        
+        $lines = $file->getLines([0, 2, 4]);
+        
+        $this->assertEquals([0 => 'Avantasia', 2 => 'Halloween', 4 => 'Stratovarius'], $lines);
     }
 }

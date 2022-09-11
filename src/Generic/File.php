@@ -2,76 +2,76 @@
 namespace AdinanCenci\JsonLines\Generic;
 
 /**
- * @property FileIterator $lines Iterator object to read the file line by line.
  * @property string $fileName
+ * @property FileIterator $lines Iterator object to read the file line by line.
  * @property int $lineCount The number of lines in the file.
  */
 class File 
 {
-    protected $fileName;
+    protected string $fileName;
 
     public function __construct(string $fileName) 
     {
         $this->fileName = $fileName;
     }
 
-    public function __get($var) 
+    public function __get(string $propertyName) 
     {
-        switch ($var) {
+        switch ($propertyName) {
             case 'lines':
                 return new FileIterator($this->fileName);
                 break;
             case 'fileName':
-                return $this->fileName;
+                return new $this->fileName;
                 break;
             case 'lineCount':
                 return $this->countLines();
                 break;
         }
 
+        \trigger_error('Trying to retrieve unknown property ' . $propertyName, \E_USER_ERROR);
         return null;
     }
 
     /**
-     * Will add content to the end of the file if $line is unset.
-     * If $line is set the content will be added to the middle of the file.
-     * If the file has less than $line lines, then the space in between will 
-     * be filled with blank lines.
+     * If a line is not specified, 
+     * $content will be added at the end of the file.
      * 
-     * @param string $content 
-     * @param int $line Optional
+     * @param string $content
+     * @param int $line
      * @throws DirectoryDoesNotExist
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function addLine(string $content, ?int $line = null) : void
+    public function addLine(string $content, int $line = -1) : void
     {
-        if ($line === null) {
-            $line = $this->countLines($lastLineEmpty);
-            $line -= $lastLineEmpty && $line > 0 ? 1 : 0;
+        $this->addLines([$line => $content], $line < 0);
+    }
+
+    /**
+     * If $toTheEndOfTheFile is set to false, the placement of the lines
+     * will reflect their keys.
+     * 
+     * @param string[] $lines A numerical array: [ lineNumber => content ].
+     * @param bool $toTheEndOfTheFile
+     * @throws DirectoryDoesNotExist
+     * @throws DirectoryIsNotWritable
+     * @throws FileIsNotWritable
+     */
+    public function addLines(array $lines, bool $toTheEndOfTheFile = true) : void
+    {
+        if ($toTheEndOfTheFile) {
+            $lastLine = $this->nameLastLine(true);
+            $keys = range($lastLine, $lastLine + count($lines) - 1);
+            $lines = array_combine($keys, array_values($lines));
         }
 
-        $this->addLines([$line => $content]);
+        $this->omniThingy()
+            ->add($lines)
+            ->commit();
     }
 
     /**
-     * @param string[] $lines A numerical array: [ lineNumber => content ].
-     * @throws DirectoryDoesNotExist
-     * @throws DirectoryIsNotWritable
-     * @throws FileIsNotWritable
-     */
-    public function addLines(array $lines) : void
-    {
-        $write = new AddToFile($this->fileName, $lines);
-        $write->writeDown();
-    }
-
-    /**
-     * Will set the contents for the line $line, overwriting anything 
-     * currently present.
-     * If the file has less than $line lines, then the space in between will 
-     * be filled with blank lines.
-     * 
      * @param int $line
      * @param string $content 
      * @throws DirectoryDoesNotExist
@@ -91,14 +91,12 @@ class File
      */
     public function setLines(array $lines) : void
     {
-        $write = new WriteToFile($this->fileName, $lines);
-        $write->writeDown();
+        $this->omniThingy()
+            ->set($lines)
+            ->commit();
     }
 
     /**
-     * Will return the contents in the $line line.
-     * If the file has less than $line lines, it will return null.
-     * 
      * @param int $line
      * @return string|null
      * @throws FileDoesNotExist
@@ -106,8 +104,8 @@ class File
      */
     public function getLine(int $line) : ?string
     {
-        $result = $this->getLines([$line]);
-        return $result ? reset($result) : null;
+        $contents = $this->getLines([$line]);
+        return $contents ? reset($contents) : null;
     }
 
     /**
@@ -118,8 +116,10 @@ class File
      */
     public function getLines(array $lines) : array
     {
-        $read = new ReadFile($this->fileName, $lines);
-        return $read->read();
+        return $this->omniThingy()
+            ->get($lines)
+            ->commit()
+            ->linesRetrieved;
     }
 
     /**
@@ -139,23 +139,32 @@ class File
      */
     public function deleteLines(array $lines) : void
     {
-        $delete = new RemoveFromFile($this->fileName, $lines);
-        $delete->remove();
+        $this->omniThingy()
+            ->delete($lines)
+            ->commit();
+    }
+
+    public function omniThingy() 
+    {
+        return new OmniThing($this->fileName);
     }
 
     /**
-     * If the last line of the file is blank, $emptyLastLine will set to true
-     * 
-     * @param bool $emptyLastLine
+     * @param bool $emptyLastLine Will indicate if the last line is empty or not.
      * @return int
      */
     public function countLines(&$emptyLastLine = false) : int
     {
-        if (! file_exists($this->fileName)) {
+        return self::countLinesOnFile($this->fileName, $emptyLastLine);
+    }
+
+    public static function countLinesOnFile(string $fileName, &$emptyLastLine = false) : int
+    {
+        if (! file_exists($fileName)) {
             return 0;
         }
 
-        $handle = fopen($this->fileName, "r");
+        $handle = fopen($fileName, 'r');
         $lineCount = 1;
   
         while(! feof($handle)){
@@ -167,5 +176,21 @@ class File
 
         fclose($handle);
         return $lineCount;
+    }
+
+    /**
+     * @param bool $ignoreEmptyLine If set to true and the last line is empty, it will return the second to last line.
+     * @return int
+     */
+    public function nameLastLine(bool $ignoreEmptyLine = false) : int
+    {
+        return self::getLastLine($this->fileName, $ignoreEmptyLine);
+    }
+
+    public static function getLastLine(string $fileName, bool $ignoreEmptyLine = false) : int
+    {
+        $lastLine = self::countLinesOnFile($fileName, $emptyLastLine);
+        $lastLine -= $ignoreEmptyLine && $emptyLastLine ? 1 : 0;
+        return $lastLine;
     }
 }

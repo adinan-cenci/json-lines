@@ -7,18 +7,18 @@ class Search
     protected $results = [];
     protected $conditions = [];
 
-    public function __construct(JsonLines $jsonLines) 
+    public function __construct($jsonLines) 
     {
         $this->jsonLines = $jsonLines;
     }
 
-    public function find() : array
+    public function find() 
     {
         $this->execute();
         return $this->results;
     }
 
-    public function includes(string $field, $value) 
+    public function includes($field, $value) 
     {
         $this->conditions[] = [
             'operator' => 'includes', 
@@ -29,7 +29,7 @@ class Search
         return $this;
     }
 
-    public function like(string $field, $value) 
+    public function like($field, $value) 
     {
         $this->conditions[] = [
             'operator' => 'likes', 
@@ -40,7 +40,7 @@ class Search
         return $this;
     }
 
-    public function equals(string $field, $value) 
+    public function equals($field, $value) 
     {
         $this->conditions[] = [
             'operator' => 'equals', 
@@ -51,7 +51,7 @@ class Search
         return $this;
     }
 
-    protected function execute() : void
+    protected function execute() 
     {
         foreach($this->jsonLines->objects as $line => $obj) {
             if (! $this->matchConditions($obj)) {
@@ -61,7 +61,7 @@ class Search
         }
     }
 
-    protected function matchConditions($obj) : bool
+    protected function matchConditions($obj) 
     {
         foreach($this->conditions as $cond) {
             if (! $this->matchCondition($obj, $cond)) {
@@ -72,7 +72,7 @@ class Search
         return true;
     }
 
-    protected function matchCondition($obj, $cond) : bool
+    protected function matchCondition($obj, $cond) 
     {
         if ($cond['operator'] == 'includes') {
             if (! $this->matchIncludesOperator($obj, $cond['field'], $cond['value'])) {
@@ -95,7 +95,7 @@ class Search
         return true;
     }
 
-    protected function matchIncludesOperator($obj, $field, $value) : bool
+    protected function matchIncludesOperator($obj, $field, $value) 
     {
         if (!$objValue = $this->getValue($obj, $field)) {
             return false;
@@ -110,7 +110,7 @@ class Search
         return (bool) array_intersect($objValue, $value);
     }
 
-    protected function matchLikesOperator($obj, $field, $value) : bool
+    protected function matchLikesOperator($obj, $field, $value) 
     {
         if (!$objValue = $this->getValue($obj, $field)) {
             return false;
@@ -133,7 +133,7 @@ class Search
         return false;
     }
 
-    protected function matchEqualsOperator($obj, $field, $value) : bool
+    protected function matchEqualsOperator($obj, $field, $value) 
     {
         if (!$objValue = $this->getValue($obj, $field)) {
             return false;
