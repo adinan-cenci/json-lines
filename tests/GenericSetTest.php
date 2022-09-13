@@ -5,39 +5,39 @@ namespace AdinanCenci\JsonLines\Tests;
 
 use AdinanCenci\JsonLines\Generic\File;
 
-final class AddTest extends Base
+final class GenericSetTest extends Base
 {
-    public function testAddSingleLine() 
+    public function testSetSingleLine() 
     {
         $fileName = 'tests/files/' . __FUNCTION__ . '.txt';
         $this->resetTest($fileName);
 
         $file = new File($fileName);
-        $file->addLine('Elvenking');
+        $file->setLine(9, 'Elvenking');
 
-        $lastLine = $file->getLine(16);
-        $this->assertEquals('Elvenking', $lastLine);
+        $nine = $file->getLine(9);
+        $this->assertEquals('Elvenking', $nine);
     }
 
-    public function testAddMultipleLines() 
+    public function testSetMultipleLines() 
     {
         $fileName = 'tests/files/' . __FUNCTION__ . '.txt';
         $this->resetTest($fileName);
 
         $file = new File($fileName);
-        $file->addLines([5 => 'Vis Mystica', 8 => 'Hammer King'], false);
-        
+        $file->setLines([5 => 'Vis Mystica', 8 => 'Hammer King'], false);
+
         $lines = $file->getLines([5, 8]);
         $this->assertEquals([5 => 'Vis Mystica', 8 => 'Hammer King'], $lines);
     }
 
-    public function testAddPastEndOfTheFile() 
+    public function testSetPastEndOfTheFile() 
     {
         $fileName = 'tests/files/' . __FUNCTION__ . '.txt';
         $this->resetTest($fileName);
 
         $file = new File($fileName);
-        $file->addLine('Elvenking', 25);
+        $file->setLine(25, 'Elvenking');
 
         $lastLine = $file->getLine(25);
         $this->assertEquals('Elvenking', $lastLine);

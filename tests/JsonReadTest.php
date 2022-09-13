@@ -1,43 +1,36 @@
 <?php
 declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
+namespace AdinanCenci\JsonLines\Tests;
+
 use AdinanCenci\JsonLines\JsonLines;
-use AdinanCenci\JsonLines\Exception\FileDoesNotExist;
-use AdinanCenci\JsonLines\Exception\FileIsNotReadable;
 
-final class ReadTest extends TestCase
+class JsonReadTest extends Base
 {
-    public function testReadNonExistentFile() 
+    public function testGetObject() 
     {
-        $file = new JsonLines('./tests/non-existent-file.jsonl');
-        $this->expectException(FileDoesNotExist::class);
+        $file = new JsonLines('./tests/template.jsonl');
         $entry = $file->getObject(0);
-    }
 
-    public function testReadFileWithoutReadingPermission() 
-    {
-        $file = new JsonLines('./tests/non-readable-file.jsonl');
-        $this->expectException(FileIsNotReadable::class);
-        $entry = $file->getObject(0);
+        $this->assertEquals('Soldiers of the wasteland', $entry->title);
     }
 
     public function testGetNonExistentOject() 
     {
-        $file = new JsonLines('./tests/readable-file.jsonl');
-        $entries = $file->getObjects([5]);
+        $file = new JsonLines('./tests/template.jsonl');
+        $entry = $file->getObject(50);
 
-        $this->assertEquals(null, $entries[5]);
+        $this->assertEquals(null, $entry);
     }
 
     public function testGetOjects() 
     {
-        $file = new JsonLines('./tests/readable-file.jsonl', true);
+        $file = new JsonLines('./tests/template.jsonl', true);
         $entries = $file->getObjects([0, 1]);
 
         $this->assertEquals([
-            0 => ["id" => 0, "name" => "foo"],
-            1 => ["id" => 1, "name" => "bar"]
+            0 => ['artist' => 'Dragon Force', 'title' => 'Soldiers of the wasteland', 'genre' => 'Metal'],
+            1 => ['artist' => 'Kamelot', 'title' => 'Forever', 'genre' => 'Metal'],
         ], $entries);
     }
 }

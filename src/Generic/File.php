@@ -66,7 +66,7 @@ class File
             $lines = array_combine($keys, array_values($lines));
         }
 
-        $this->omniThingy()
+        $this->crud()
             ->add($lines)
             ->commit();
     }
@@ -91,7 +91,7 @@ class File
      */
     public function setLines(array $lines) : void
     {
-        $this->omniThingy()
+        $this->crud()
             ->set($lines)
             ->commit();
     }
@@ -116,7 +116,7 @@ class File
      */
     public function getLines(array $lines) : array
     {
-        return $this->omniThingy()
+        return $this->crud()
             ->get($lines)
             ->commit()
             ->linesRetrieved;
@@ -139,14 +139,14 @@ class File
      */
     public function deleteLines(array $lines) : void
     {
-        $this->omniThingy()
+        $this->crud()
             ->delete($lines)
             ->commit();
     }
 
-    public function omniThingy() 
+    public function crud() : Crud
     {
-        return new OmniThing($this->fileName);
+        return new Crud($this->fileName);
     }
 
     /**

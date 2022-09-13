@@ -5,11 +5,11 @@ namespace AdinanCenci\JsonLines\Tests;
 
 use AdinanCenci\JsonLines\Generic\File;
 
-final class ReadTest extends Base
+final class GenericReadTest extends Base
 {
     public function testGetSingleLine() 
     {
-        $file = new File('tests/template.txt');        
+        $file = new File('tests/template.txt');
         $thirLine = $file->getLine(2);
 
         $this->assertEquals('Halloween', $thirLine);
@@ -17,7 +17,7 @@ final class ReadTest extends Base
 
     public function testGetNonExistentLine() 
     {
-        $file = new File('tests/template.txt');        
+        $file = new File('tests/template.txt');
         $thirLine = $file->getLine(50);
 
         $this->assertEquals(null, $thirLine);
@@ -25,9 +25,9 @@ final class ReadTest extends Base
 
     public function testGetMultipleLines() 
     {
-        $file = new File('tests/template.txt');        
+        $file = new File('tests/template.txt');
         $lines = $file->getLines([0, 2, 4]);
-        
+
         $this->assertEquals([0 => 'Avantasia', 2 => 'Halloween', 4 => 'Stratovarius'], $lines);
     }
 }

@@ -7,7 +7,7 @@ use AdinanCenci\JsonLines\Exception\FileIsNotWritable;
 use AdinanCenci\JsonLines\Exception\FileDoesNotExist;
 use AdinanCenci\JsonLines\Exception\FileIsNotReadable;
 
-class OmniThing  
+class Crud 
 {
     protected string $fileName = '';
     protected int $finalLine = 0;
@@ -46,25 +46,25 @@ class OmniThing
         \trigger_error('Trying to retrieve unknown property ' . $propertyName, \E_USER_ERROR);
     }
 
-    public function get($lines) : self
+    public function get(array $lines) : self
     {
         $this->linesToGet = $lines;
         return $this;
     }
 
-    public function add($lines) : self
+    public function add(array $lines) : self
     {
         $this->linesToAdd = $lines;
         return $this;
     }
 
-    public function set($lines) : self
+    public function set(array $lines) : self
     {
         $this->linesToSet = $lines;
         return $this;
     }
 
-    public function delete($lines) : self
+    public function delete(array $lines) : self
     {
         $this->linesToDelete = $lines;
         return $this;
@@ -127,7 +127,7 @@ class OmniThing
                 $this->writeToTempFile($this->linesToSet[ $this->iterator->currentLine ]);
                 $this->iterator->next();
                 $this->newFileLine++;
-            } elseif (isset($this->linesToSet[ $this->newFileLine ])) {
+            } elseif (isset($this->linesToSet[ $this->newFileLine ]) && !$this->iterator->valid()) {
                 $this->writeToTempFile($this->linesToSet[ $this->newFileLine ]);
                 $this->newFileLine++;
             }
@@ -136,7 +136,8 @@ class OmniThing
                 $this->writeToTempFile($this->linesToAdd[ $this->newFileLine ]);
                 $this->newFileLine++;
             } else if ($this->tempFile) {
-                $this->writeToTempFile($this->iterator->current());
+                $this->read();
+                $this->writeToTempFile((string) $this->iterator->current());
                 $this->iterator->next();
                 $this->newFileLine++;
             } else {
@@ -144,7 +145,7 @@ class OmniThing
                 $this->iterator->next();
                 $this->newFileLine++;
             }
-        }        
+        }
     }
 
     protected function ended() : void
@@ -162,6 +163,7 @@ class OmniThing
 
     protected function read() 
     {
+        $xx = $this->iterator->currentLine;
         if (in_array($this->iterator->currentLine, $this->linesToGet)) {
             $content = $this->iterator->current();
             $content = rtrim($content, "\n");

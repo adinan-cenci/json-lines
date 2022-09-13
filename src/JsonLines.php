@@ -8,15 +8,15 @@ use AdinanCenci\JsonLines\Generic\File;
  */
 class JsonLines extends File 
 {
-    protected $associative = false;
+    protected bool $associative = false;
 
-    public function __construct($fileName, $associative = false) 
+    public function __construct(string $fileName, bool $associative = false) 
     {
         parent::__construct($fileName);
         $this->associative = $associative;
     }
 
-    public function __get($var) 
+    public function __get(string $var) 
     {
         if ($var == 'objects') {
             return new JsonLinesIterator($this->fileName, $this->associative);
@@ -26,26 +26,16 @@ class JsonLines extends File
     }
 
     /**
-     * Adds an object to the end of the file.
+     * Adds an object to the file.
      * 
-     * @param int $line
      * @param array|object $object
+     * @param int $line
      * @throws DirectoryDoesNotExist
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function addObject($line = null, $object = null) 
+    public function addObject($object = null, int $line = -1) : void
     {
-        $args = func_get_args();
-        if (count($args) == 2) {
-            $line = $args[0];
-            $object = $args[1];
-        } else {
-            $line = $this->countLines($lastLineEmpty);
-            $line -= $lastLineEmpty ? 1 : 0;
-            $object = $args[0];
-        }
-
         $this->addObjects([$line => $object]);
     }
 
@@ -55,7 +45,7 @@ class JsonLines extends File
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function addObjects($objects) 
+    public function addObjects(array $objects) : void
     {
         array_walk($objects, function(&$object) 
         {
@@ -72,7 +62,7 @@ class JsonLines extends File
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function setObject($line, $object) 
+    public function setObject(int $line, $object) : void
     {
         $this->setObjects([$line => $object]);
     }
@@ -83,7 +73,7 @@ class JsonLines extends File
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function setObjects($objects) 
+    public function setObjects(array $objects) : void
     {
         array_walk($objects, function(&$object) 
         {
@@ -99,7 +89,7 @@ class JsonLines extends File
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
-    public function getObject($line) 
+    public function getObject(int $line) : ?object
     {
         $result = $this->getObjects([$line]);
         return reset($result);
@@ -111,7 +101,7 @@ class JsonLines extends File
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
-    public function getObjects($lines)
+    public function getObjects(array $lines) : array
     {
         $entries = $this->getLines($lines);
         $associative = $this->associative;
@@ -128,9 +118,9 @@ class JsonLines extends File
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
-    public function deleteObjects($lines) 
+    public function deleteObjects(array $lines) : void
     {
-        return $this->deleteLines($lines);
+        $this->deleteLines($lines);
     }
 
     /**
@@ -138,18 +128,25 @@ class JsonLines extends File
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
-    public function deleteObject($lines) 
+    public function deleteObject(int $line) : void
     {
-        return $this->deleteLine([$lines]);
+        $this->deleteLine([$line]);
     }
 
-    public function search() 
+    public function search() : Search
     {
         return new Search($this);
     }
 
-    public static function jsonDecode($json, $associative = false, $lineNumber) 
+    /**
+     * @return array|\stdClass|null
+     */
+    public static function jsonDecode($json, bool $associative = false, $lineNumber) 
     {
+        if ($json === null) {
+            return null;
+        }
+
         $json = rtrim($json, "\n");
 
         if ($json == '') {
