@@ -45,14 +45,14 @@ class JsonLines extends File
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function addObjects(array $objects) : void
+    public function addObjects(array $objects, bool $toTheEndOfTheFile = true) : void
     {
         array_walk($objects, function(&$object) 
         {
             $object = json_encode($object);
         });
 
-        $this->addLines($objects);
+        $this->addLines($objects, $toTheEndOfTheFile);
     }
 
     /**
@@ -89,7 +89,7 @@ class JsonLines extends File
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
-    public function getObject(int $line) : ?object
+    public function getObject(int $line) 
     {
         $result = $this->getObjects([$line]);
         return reset($result);
@@ -130,7 +130,7 @@ class JsonLines extends File
      */
     public function deleteObject(int $line) : void
     {
-        $this->deleteLine([$line]);
+        $this->deleteLines([$line]);
     }
 
     public function search() : Search

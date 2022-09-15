@@ -26,6 +26,10 @@
         "phpunit/phpunit": "^9.5"
     },
     "scripts": {
+        "unit-fuck": 
+        [
+            "./vendor/bin/phpunit tests --filter=GenericSetTest::testSetSingleLine"
+        ],
         "unit-tests": [
             "./vendor/bin/phpunit tests"
         ]

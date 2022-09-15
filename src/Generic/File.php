@@ -62,7 +62,7 @@ class File
     {
         if ($toTheEndOfTheFile) {
             $lastLine = $this->nameLastLine(true);
-            $keys = range($lastLine, $lastLine + count($lines) - 1);
+            $keys = range($lastLine, ($lastLine + count($lines)) - 1);
             $lines = array_combine($keys, array_values($lines));
         }
 

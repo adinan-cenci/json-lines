@@ -5,7 +5,7 @@ namespace AdinanCenci\JsonLines\Tests;
 
 use AdinanCenci\JsonLines\JsonLines;
 
-class JsonReadTest extends Base
+class JsonGetTest extends Base
 {
     public function testGetObject() 
     {
@@ -29,8 +29,8 @@ class JsonReadTest extends Base
         $entries = $file->getObjects([0, 1]);
 
         $this->assertEquals([
-            0 => ['artist' => 'Dragon Force', 'title' => 'Soldiers of the wasteland', 'genre' => 'Metal'],
-            1 => ['artist' => 'Kamelot', 'title' => 'Forever', 'genre' => 'Metal'],
+            0 => ['artist' => 'Dragon Force', 'title' => 'Soldiers of the wasteland'],
+            1 => ['artist' => 'Kamelot', 'title' => 'Forever'],
         ], $entries);
     }
 }

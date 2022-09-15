@@ -7,7 +7,7 @@ abstract class Base extends TestCase
 {
     protected function resetTest($file = null, $template = './tests/template.txt') 
     {
-        $contents = file_get_contents($template);
+        $contents = $template == '' ? '' : file_get_contents($template);
         file_put_contents($file, $contents);
     }
 

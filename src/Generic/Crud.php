@@ -125,15 +125,16 @@ class Crud
             } elseif (isset($this->linesToSet[ $this->iterator->currentLine ])) {
                 $this->read();
                 $this->writeToTempFile($this->linesToSet[ $this->iterator->currentLine ]);
+                unset($this->linesToSet[ $this->iterator->currentLine ]);
                 $this->iterator->next();
                 $this->newFileLine++;
             } elseif (isset($this->linesToSet[ $this->newFileLine ]) && !$this->iterator->valid()) {
                 $this->writeToTempFile($this->linesToSet[ $this->newFileLine ]);
+                unset($this->linesToSet[ $this->newFileLine ]);
                 $this->newFileLine++;
-            }
-
-            if (isset($this->linesToAdd[ $this->newFileLine ])) {
+            } elseif (isset($this->linesToAdd[ $this->newFileLine ])) {
                 $this->writeToTempFile($this->linesToAdd[ $this->newFileLine ]);
+                unset($this->linesToAdd[ $this->newFileLine ]);
                 $this->newFileLine++;
             } else if ($this->tempFile) {
                 $this->read();
@@ -145,6 +146,7 @@ class Crud
                 $this->iterator->next();
                 $this->newFileLine++;
             }
+
         }
     }
 
@@ -178,7 +180,7 @@ class Crud
         }
 
         return max(
-            File::getLastLine($this->fileName, true),
+            File::getLastLine($this->fileName, true) - 1,
             $this->linesToGet ? max($this->linesToGet) : 0,
             $this->linesToAdd ? max(array_keys($this->linesToAdd)) : 0,
             $this->linesToSet ? max(array_keys($this->linesToSet)) : 0
@@ -196,7 +198,8 @@ class Crud
     {
         $string = (string) $content;
         $string = str_replace(["\n", "\r"], '', $string);
-        $string .= $appendLineBreak ? "\n" : '';
+        //$string .= $appendLineBreak ? "\n" : '';
+        $string .= "\n";
         return $string;
     }
 
