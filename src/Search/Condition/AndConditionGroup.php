@@ -3,10 +3,16 @@ namespace AdinanCenci\JsonLines\Search\Condition;
 
 use AdinanCenci\JsonLines\Search\Condition\OrConditionGroup;
 
-class AndConditionGroup implements ConditionInterface 
+class AndConditionGroup implements ConditionInterface, ConditionGroupInterface 
 {
+    /**
+     * @param ConditionInterface[] $conditions
+     */
     protected array $conditions = [];
 
+    /**
+     * @inheritDoc
+     */
     public function condition(string $property, $valueToCompare, string $operatorId = '=') : self
     {
         $condition = new Condition($property, $valueToCompare, $operatorId);
@@ -14,6 +20,9 @@ class AndConditionGroup implements ConditionInterface
         return $this;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function evaluate($data) : bool
     {
         foreach ($this->conditions as $condition) {
@@ -25,6 +34,9 @@ class AndConditionGroup implements ConditionInterface
         return true;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function andConditionGroup() : AndConditionGroup
     {
         $group = new AndConditionGroup();
@@ -32,6 +44,9 @@ class AndConditionGroup implements ConditionInterface
         return $group;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function orConditionGroup() : OrConditionGroup
     {
         $group = new OrConditionGroup();

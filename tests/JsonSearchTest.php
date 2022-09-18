@@ -9,19 +9,42 @@ class JsonSearchTest extends Base
 {
     public function testSearch() 
     {
-        $file = new JsonLines('./tests/template.jsonl');        
+        $file = new JsonLines('./tests/template-search.jsonl');        
         $search = $file->search();
         
-        $search->condition('title', 'Swing Doors', '=');
+        $search->condition('title', 'The Bard\'s song');
         
-        /*$search->orConditionGroup()
-            ->condition('title', 'Swing Doors')
-            ->condition('title', 'Tale of Warriors');*/
-
         $results = $search->find();
 
-        var_dump($results);
+        $this->assertEquals(2, count($results));
+    }
 
-        $this->assertEquals(1, 1);
+    public function testSearchAnd() 
+    {
+        $file = new JsonLines('./tests/template-search.jsonl');        
+        $search = $file->search();
+        
+        $search
+            ->condition('title', 'The Bard\'s song', '=')
+            ->condition('artist', 'Blind Guardian');
+        
+        $results = $search->find();
+
+        $this->assertEquals(1, count($results));
+    }
+
+    public function testSearchAnd2() 
+    {
+        $file = new JsonLines('./tests/template-search.jsonl');        
+        $search = $file->search();
+        
+        $search
+            ->orConditionGroup()
+                ->condition('artist', 'Blind Guardian')
+                ->condition('artist', 'Roy Brown');
+        
+        $results = $search->find();
+
+        $this->assertEquals(4, count($results));
     }
 }

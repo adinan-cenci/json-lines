@@ -128,15 +128,15 @@ $file->deleteObjects($lines);
 ```php
 $search = $file->search();
 
-$search->equals('id', 1);
+$search->condition('id', 1);
 
 // case insensitive
-$search->includes('name', 'foo bar');
+$search->condition('title', 'foo bar', 'IN');
 
-// like ::includes() but it will include inexact matches like "foo bar" or "bar foo"
-$search->like('name', 'foo'); 
+// like 'IN' but it will include inexact matches like "foo bar" or "bar foo"
+$search->condition('title', 'foo', 'LIKE'); 
 
-$objects = $search->find();
+$results = $search->find();
 ```
 
 <br><br>

@@ -4,9 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - Unreleased
+The library was rewritten almost entirely from scratch.
+### Removed
+- `Search::equals()`
+- `Search::includes()`
+- `Search::like()`, all three replaced by `Search::condition()`.
+
+### Added
+- `JsonLines::crud()`
+- `Search::condition()`
+- `Search::andConditionGroup()`
+- `Search::orConditionGroup()`
+
 ## [1.0.1] - 2022-06-09
 ### Fixed
-- JsonLines::$fineName: instead of returning the filename as a string, the object was attempting to instantiate it.
+- `JsonLines::$fineName`: instead of returning the filename ( a string ), the `JsonLines` was attempting to instantiate it.
 
 ## [1.0.0] - 2022-05-30
 ### Changed
