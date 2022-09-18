@@ -17,7 +17,7 @@ abstract class OperatorBase
 
     }
 
-    public static function isScalar($data) : bool
+    protected static function isScalar($data) : bool
     {
         if (is_bool($data)) {
             return true;
@@ -30,7 +30,7 @@ abstract class OperatorBase
         return is_scalar($data);
     }
 
-    public static function normalize($data) 
+    protected static function normalize($data) 
     {
         $data = is_object($data) 
             ? (array) $data 
@@ -41,16 +41,7 @@ abstract class OperatorBase
             : self::normalizeScalar($data);
     }
 
-    public static function strToLower($data) 
-    {
-        if (is_string($data)) {
-            return strtolower($data);
-        }
-
-        return $data;
-    }
-
-    public static function normalizeScalar($data) 
+    protected static function normalizeScalar($data) 
     {
         if (is_bool($data)) {
             return $data;
@@ -59,7 +50,7 @@ abstract class OperatorBase
         return trim( strtolower( (string) $data) );
     }
 
-    public static function normalizeArray(array $data) : array
+    protected static function normalizeArray(array $data) : array
     {
         foreach ($data as $key => $value) {
             if (self::isScalar($value)) {
@@ -67,6 +58,25 @@ abstract class OperatorBase
             }
         }
 
+        if (self::isNumericalArray($data)) {
+            sort($data);
+        }
+
         return $data;
+    }
+
+    protected static function strToLower($data) 
+    {
+        if (is_string($data)) {
+            return strtolower($data);
+        }
+
+        return $data;
+    }
+
+    protected static function isNumericalArray(array $array) : bool
+    {
+        $keys = array_keys($array);
+        return $keys === array_keys($keys);
     }
 }

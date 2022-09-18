@@ -1,4 +1,4 @@
-Avantasia
+foo-bar
 Centinela
 Halloween
 Savage Circus

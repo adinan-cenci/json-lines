@@ -7,24 +7,26 @@ use AdinanCenci\JsonLines\Search\Operator\Likes;
 
 final class OperatorLikesTest extends Base
 {
-    public function testCompareScalarValues() 
+    public function testCompareStrings() 
     {
         $actualValue = 'Highland Glory';
         $toCompare = 'Highland Glory';
 
         $operator = new Likes($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
-
-        //---------
-
+    }
+    
+    public function testCompareStringsCaseInsensitive()
+    {
         $actualValue = 'Highland Glory';
         $toCompare = 'HIGHLAND GLORY';
 
         $operator = new Likes($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
+    }
 
-        //---------
-
+    public function testCompareSubstring() 
+    {
         $actualValue = 'Highland Glory';
         $toCompare = 'glory';
 
@@ -32,25 +34,36 @@ final class OperatorLikesTest extends Base
         $this->assertTrue($operator->matches());
     }
 
-    public function testCompareArraysToScalarValues() 
+    public function testCompareStringToArray() 
+    {
+        $actualValue = 'Highland Glory';
+        $toCompare = ['glory'];
+
+        $operator = new Likes($actualValue, $toCompare);
+        $this->assertTrue($operator->matches());
+    }
+
+    public function testCompareArrayToString() 
     {
         $actualValue = ['Highland Glory'];
         $toCompare = 'Highland Glory';
 
         $operator = new Likes($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
+    }
 
-        //---------
-
+    public function testCompareArrayToStringCaseInsensitive() 
+    {
         $actualValue = ['Highland Glory'];
         $toCompare = 'HIGHLAND GLORY';
 
         $operator = new Likes($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
+    }
 
-        //---------
-
-        $actualValue = 'Highland Glory';
+    public function testCompareArrayToSubstring() 
+    {
+        $actualValue = ['Highland Glory'];
         $toCompare = 'glory';
 
         $operator = new Likes($actualValue, $toCompare);
@@ -64,11 +77,30 @@ final class OperatorLikesTest extends Base
 
         $operator = new Likes($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
+    }
 
-        //---------
+    public function testCompareArrayToArraySubstring() 
+    {
+        $actualValue = ['Highland Glory'];
+        $toCompare = ['Glory'];
 
+        $operator = new Likes($actualValue, $toCompare);
+        $this->assertTrue($operator->matches());
+    }
+
+    public function testCompareArrayToArrayCaseInsensitive() 
+    {
         $actualValue = ['Highland Glory'];
         $toCompare = ['HIGHLAND GLORY'];
+
+        $operator = new Likes($actualValue, $toCompare);
+        $this->assertTrue($operator->matches());
+    }
+
+    public function testCompareIntersectingArrays() 
+    {
+        $actualValue = ['Highland Glory', 'Gloryhammer'];
+        $toCompare = ['Highland Glory'];
 
         $operator = new Likes($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
@@ -76,7 +108,7 @@ final class OperatorLikesTest extends Base
         //---------
 
         $actualValue = ['Highland Glory', 'Gloryhammer'];
-        $toCompare = ['Highland Glory'];
+        $toCompare = ['hammer'];
 
         $operator = new Likes($actualValue, $toCompare);
         $this->assertTrue($operator->matches());

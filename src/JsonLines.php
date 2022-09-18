@@ -2,6 +2,7 @@
 namespace AdinanCenci\JsonLines;
 
 use AdinanCenci\JsonLines\Generic\File;
+use AdinanCenci\JsonLines\Search\Search;
 
 /**
  * @property \Iterator $objects

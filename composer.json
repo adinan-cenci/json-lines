@@ -19,6 +19,7 @@
             "AdinanCenci\\JsonLines\\": "src/",
             "AdinanCenci\\JsonLines\\Generic\\": "src/Generic/",
             "AdinanCenci\\JsonLines\\Exception\\": "src/Exception/",
+            "AdinanCenci\\JsonLines\\Search\\": "src/Search/",
             "AdinanCenci\\JsonLines\\Tests\\": "tests/"
         }
     },
