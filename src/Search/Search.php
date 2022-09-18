@@ -9,12 +9,14 @@ use AdinanCenci\JsonLines\Search\Condition\OrConditionGroup;
 class Search implements ConditionGroupInterface 
 {
     protected JsonLines $jsonLines;
-    protected AndConditionGroup $mainConditionGroup;
+    protected ConditionGroupInterface $mainConditionGroup;
 
-    public function __construct(JsonLines $jsonLines) 
+    public function __construct(JsonLines $jsonLines, $operator = 'AND') 
     {
         $this->jsonLines = $jsonLines;
-        $this->mainConditionGroup = new AndConditionGroup();
+        $this->mainConditionGroup = $operator == 'OR'
+            ? new OrConditionGroup()
+            : new AndConditionGroup();
     }
 
     /**
@@ -25,7 +27,7 @@ class Search implements ConditionGroupInterface
     {
         $results = [];
         foreach ($this->jsonLines->objects as $line => $object) {
-            if ($this->evaluate($object)) {
+            if ($object && $this->evaluate($object)) {
                 $results[ $line ] = $object;
             }
         }

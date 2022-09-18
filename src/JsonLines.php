@@ -134,9 +134,9 @@ class JsonLines extends File
         $this->deleteLines([$line]);
     }
 
-    public function search() : Search
+    public function search(string $operator = 'AND') : Search
     {
-        return new Search($this);
+        return new Search($this, $operator);
     }
 
     /**
