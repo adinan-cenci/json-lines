@@ -13,7 +13,7 @@ class AndConditionGroup implements ConditionInterface, ConditionGroupInterface
     /**
      * @inheritDoc
      */
-    public function condition(string $property, $valueToCompare, string $operatorId = '=') : self
+    public function condition($property, $valueToCompare, string $operatorId = '=') : self
     {
         $condition = new Condition($property, $valueToCompare, $operatorId);
         $this->conditions[] = $condition;

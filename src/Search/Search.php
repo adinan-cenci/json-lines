@@ -45,7 +45,7 @@ class Search implements ConditionGroupInterface
     /**
      * @inheritDoc
      */
-    public function condition(string $property, $valueToCompare, string $operatorId = '=') : self
+    public function condition($property, $valueToCompare, string $operatorId = '=') : self
     {
         $this->mainConditionGroup->condition($property, $valueToCompare, $operatorId);
         return $this;

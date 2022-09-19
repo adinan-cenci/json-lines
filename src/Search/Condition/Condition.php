@@ -7,17 +7,22 @@ use AdinanCenci\JsonLines\Search\Operator\Includes;
 
 class Condition implements ConditionInterface 
 {
-    protected string $property;
+    protected array $property;
     protected $valueToCompare;
     protected string $operatorClass;
     protected bool $negate = false;
 
-    public function __construct(string $property, $valueToCompare, string $operatorId = '=') 
+    /**
+     * @param array|string[] $property Either a simle string or an array of strings to reache nested properties.
+     * @param mixed $valueToCompare
+     * @param string $operatorId
+     */
+    public function __construct($property, $valueToCompare, string $operatorId = '=') 
     {
-        $this->property = $property;
+        $this->property       = (array) $property;
         $this->valueToCompare = $valueToCompare;
-        $this->operatorClass = $this->getOperatorClass($operatorId, $negation);
-        $this->negation = $negation;
+        $this->operatorClass  = $this->getOperatorClass($operatorId, $negation);
+        $this->negation       = $negation;
     }
 
     /**
@@ -26,8 +31,8 @@ class Condition implements ConditionInterface
     public function evaluate($data) : bool
     {
         $actualValue = $this->getValue($data, $this->property);
-        $operator = new $this->operatorClass($actualValue, $this->valueToCompare);
-        $result = $operator->matches();
+        $operator    = new $this->operatorClass($actualValue, $this->valueToCompare);
+        $result      = $operator->matches();
 
         return $this->negation
             ? !$result
@@ -35,15 +40,25 @@ class Condition implements ConditionInterface
     }
 
     /**
+     * Retrieves the property from $data we are going to evaluate.
+     * 
      * @param array|\stdClass $data
-     * @param string $property
+     * @param array $property
      * @return string|int|float|bool|null|array|\stdClass
      */
-    protected function getValue($data, string $property) 
+    protected function getValue($data, array $property) 
     {
-        return is_object($data)
-            ? $data->{$property}
-            : $data[ $property ];
+        foreach ($property as $part) {
+            if (is_object($data) && isset($data->{$part})) {
+                $data = $data->{$part};
+            } elseif (is_array($data) && isset($data[$part])) {
+                $data = $data[$part];
+            } else {
+                return null;
+            }
+        }
+
+        return $data;
     }
 
     protected function getOperatorClass(string $operatorId, &$negation = false) : ?string

@@ -9,11 +9,11 @@ class JsonSearchTest extends Base
 {
     public function testSearchEqualsOperator() 
     {
-        $file = new JsonLines('./tests/template-search.jsonl');        
+        $file = new JsonLines('./tests/template-search.jsonl');
         $search = $file->search();
-        
+
         $search->condition('title', 'The Bard\'s song', '=');
-        
+
         $results = $search->find();
 
         $this->assertEquals(2, count($results));
@@ -21,13 +21,13 @@ class JsonSearchTest extends Base
 
     public function testAndSearchWithTwoConditions() 
     {
-        $file = new JsonLines('./tests/template-search.jsonl');        
+        $file = new JsonLines('./tests/template-search.jsonl');
         $search = $file->search();
-        
+
         $search
             ->condition('title', 'The Bard\'s song', '=')
             ->condition('artist', 'Blind Guardian', '=');
-        
+
         $results = $search->find();
 
         $this->assertEquals(1, count($results));
@@ -35,13 +35,13 @@ class JsonSearchTest extends Base
 
     public function testOrSearchWithTwoConditions() 
     {
-        $file = new JsonLines('./tests/template-search.jsonl');        
+        $file = new JsonLines('./tests/template-search.jsonl');
         $search = $file->search('OR');
-        
+
         $search
             ->condition('artist', 'Blind Guardian', '=')
             ->condition('artist', 'Roy Brown', '=');
-        
+
         $results = $search->find();
 
         $this->assertEquals(4, count($results));
@@ -49,9 +49,9 @@ class JsonSearchTest extends Base
 
     public function testOrSearchMultilevalConditions() 
     {
-        $file = new JsonLines('./tests/template-search.jsonl');        
+        $file = new JsonLines('./tests/template-search.jsonl');
         $search = $file->search('OR');
-        
+
         $search
             ->andConditionGroup()
                 ->condition('artist', 'Blind Guardian', '=')
@@ -61,9 +61,22 @@ class JsonSearchTest extends Base
             ->andConditionGroup()
                 ->condition('artist', 'Roy Brown', '=')
                 ->condition('title', 'Big Town', '=');
-        
+
         $results = $search->find();
 
         $this->assertEquals(2, count($results));
+    }
+
+    public function testSearchForNestedProperty() 
+    {
+        $file = new JsonLines('./tests/template-search.jsonl');
+        $search = $file->search('OR');
+
+        $search->condition(['source', 'youtube'], 'PJ9IaplRrm4');
+
+        $results = $search->find();
+        $result = reset($results);
+
+        $this->assertEquals('Into Each Life Some Rain Must Fall', $result->title);
     }
 }
