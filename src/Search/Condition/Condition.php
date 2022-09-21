@@ -12,6 +12,16 @@ class Condition implements ConditionInterface
     protected string $operatorClass;
     protected bool $negate = false;
 
+    const EQUALS_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\Equals';
+    const INCLUDES_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\Includes';
+    const LIKES_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\Likes';
+    const BETWEEM_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\Between';
+    const IS_NULL_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\IsNull';
+    const LESS_THEN_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\LessThen';
+    const GREATER_THEN_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\GreaterThen';
+    const LESS_OR_EQUAL_TO_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\LessOrEqualTo';
+    const GREATER_OR_EQUAL_TO_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\GreaterOrEqualTo';
+
     /**
      * @param array|string[] $property Either a simle string or an array of strings to reache nested properties.
      * @param mixed $valueToCompare
@@ -31,7 +41,7 @@ class Condition implements ConditionInterface
     public function evaluate($data) : bool
     {
         $actualValue = $this->getValue($data, $this->property);
-        $operator    = new $this->operatorClass($actualValue, $this->valueToCompare);
+        $operator    = $this->instantiateOperator($actualValue, $this->valueToCompare, $this->operatorClass);
         $result      = $operator->matches();
 
         return $this->negation
@@ -61,6 +71,11 @@ class Condition implements ConditionInterface
         return $data;
     }
 
+    protected function instantiateOperator($actualValue, $valueToCompare, $operatorClass) 
+    {
+        return new $operatorClass($actualValue, $valueToCompare);
+    }
+
     protected function getOperatorClass(string $operatorId, &$negation = false) : ?string
     {
         $negation = substr_count($operatorId, '!') || substr_count($operatorId, 'NOT');
@@ -68,15 +83,39 @@ class Condition implements ConditionInterface
         switch ($operatorId) {
             case '=' :
             case '!=' :
-                return 'AdinanCenci\JsonLines\Search\Operator\Equals';
+                return self::EQUALS_OPERATOR;
                 break;
             case 'IN' :
             case 'NOT IN' :
-                return 'AdinanCenci\JsonLines\Search\Operator\Includes';
+            case '!IN' :
+                return self::INCLUDES_OPERATOR;
                 break;
             case 'LIKE' :
             case 'NOT LIKE' :
-                return 'AdinanCenci\JsonLines\Search\Operator\Likes';
+            case '!LIKE' :
+                return self::LIKES_OPERATOR;
+                break;
+            case 'BETWEEN' :
+            case 'NOT BETWEEN' :
+            case '!BETWEEN' :
+                return self::BETWEEM_OPERATOR;
+                break;
+            case 'IS NULL':
+            case 'NOT NULL':
+            case '!NULL':
+                return self::IS_NULL_OPERATOR;
+                break;
+            case '<':
+                return self::LESS_THEN_OPERATOR;
+                break;
+            case '>':
+                return self::GREATER_THEN_OPERATOR;
+                break;
+            case '<=':
+                return self::LESS_OR_EQUAL_TO_OPERATOR;
+                break;
+            case '>=':
+                return self::GREATER_OR_EQUAL_TO_OPERATOR;
                 break;
         }
 

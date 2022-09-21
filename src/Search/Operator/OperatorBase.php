@@ -1,7 +1,7 @@
 <?php 
 namespace AdinanCenci\JsonLines\Search\Operator;
 
-abstract class OperatorBase 
+abstract class OperatorBase implements OperatorInterface 
 {
     protected $actualValue;
     protected $valueToCompare;
@@ -10,11 +10,20 @@ abstract class OperatorBase
     {
         $this->actualValue = self::normalize($actualValue);
         $this->valueToCompare = self::normalize($valueToCompare);
+        $this->validateValueToCompare();
     }
 
+    /**
+     * @inheritDoc
+     */
     public function matches() : bool
     {
 
+    }
+
+    protected function validateValueToCompare() 
+    {
+        return true;
     }
 
     protected static function isScalar($data) : bool
@@ -32,13 +41,15 @@ abstract class OperatorBase
 
     protected static function normalize($data) 
     {
+        $class = get_called_class();
+
         $data = is_object($data) 
             ? (array) $data 
             : $data;
 
         return is_array($data) 
-            ? self::normalizeArray($data)
-            : self::normalizeScalar($data);
+            ? $class::normalizeArray($data)
+            : $class::normalizeScalar($data);
     }
 
     protected static function normalizeScalar($data) 
@@ -52,9 +63,11 @@ abstract class OperatorBase
 
     protected static function normalizeArray(array $data) : array
     {
+        $class = get_called_class();
+
         foreach ($data as $key => $value) {
             if (self::isScalar($value)) {
-                $data[$key] = self::normalizeScalar($value);
+                $data[$key] = $class::normalizeScalar($value);
             }
         }
 

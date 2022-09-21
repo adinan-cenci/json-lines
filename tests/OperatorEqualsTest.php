@@ -44,10 +44,10 @@ final class OperatorEqualsTest extends Base
         $this->assertTrue($operator->matches());
     }
 
-    public function testCompareIntToNumericalString() 
+    public function testCompareIntegerToNumericalString() 
     {
-        $actualValue = 0;
-        $toCompare = '0';
+        $actualValue = 5;
+        $toCompare = '5';
 
         $operator = new Equals($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
@@ -98,7 +98,7 @@ final class OperatorEqualsTest extends Base
         $operator = new Equals($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
-    
+
     public function testCompareArrayToArrayCaseInsensitive() 
     {
         $actualValue = ['Highland Glory'];
@@ -115,7 +115,7 @@ final class OperatorEqualsTest extends Base
 
         $operator = new Equals($actualValue, $toCompare);
         $this->assertFalse($operator->matches());
-        
+
         //----------------------------
 
         $actualValue = ['Highland Glory'];
