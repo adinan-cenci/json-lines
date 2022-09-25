@@ -17,8 +17,8 @@ class Condition implements ConditionInterface
     const LIKES_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\Likes';
     const BETWEEM_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\Between';
     const IS_NULL_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\IsNull';
-    const LESS_THEN_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\LessThen';
-    const GREATER_THEN_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\GreaterThen';
+    const LESS_THEN_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\LessThan';
+    const GREATER_THEN_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\GreaterThan';
     const LESS_OR_EQUAL_TO_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\LessOrEqualTo';
     const GREATER_OR_EQUAL_TO_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\GreaterOrEqualTo';
 
@@ -31,7 +31,13 @@ class Condition implements ConditionInterface
     {
         $this->property       = (array) $property;
         $this->valueToCompare = $valueToCompare;
-        $this->operatorClass  = $this->getOperatorClass($operatorId, $negation);
+        $class                = $this->getOperatorClass($operatorId, $negation);
+
+        if (is_null($class)) {
+            throw new \InvalidArgumentException('Unrecognized operator ' . $operatorId);
+        }
+
+        $this->operatorClass = $class;
         $this->negation       = $negation;
     }
 

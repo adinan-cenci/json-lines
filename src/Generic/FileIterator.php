@@ -3,12 +3,12 @@ namespace AdinanCenci\JsonLines\Generic;
 
 class FileIterator implements \Iterator 
 {
-    protected $fileName          = null;
+    protected string $fileName   = '';
     protected $handle            = null;
     protected $currentContent    = null;
-    protected $currentLine       = 0;
+    protected int $currentLine   = 0;
 
-    public function __construct($fileName) 
+    public function __construct(string $fileName) 
     {
         $this->fileName = $fileName;
     }

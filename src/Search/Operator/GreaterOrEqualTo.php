@@ -1,7 +1,7 @@
 <?php 
 namespace AdinanCenci\JsonLines\Search\Operator;
 
-class GreaterOrEqualTo extends LessThen implements OperatorInterface 
+class GreaterOrEqualTo extends LessThan implements OperatorInterface 
 {
     /**
      * @inheritDoc

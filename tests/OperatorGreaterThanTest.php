@@ -24,4 +24,13 @@ final class OperatorGreaterThanTest extends Base
         $operator = new GreaterThan($actualValue, $toCompare);
         $this->assertFalse($operator->matches());
     }
+
+    public function testCompareNonNumericalValue() 
+    {
+        $actualValue = 5;
+        $toCompare = 'foobar';
+
+        $this->expectException('InvalidArgumentException');
+        $operator = new GreaterThan($actualValue, $toCompare);
+    }
 }

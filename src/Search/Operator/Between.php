@@ -15,7 +15,7 @@ class Between extends OperatorBase implements OperatorInterface
         $min = reset($this->valueToCompare);
         $max = end($this->valueToCompare);
 
-        return $this->actualValue >= $min && $this->actualValue <= $max;
+        return $this->actualValue > $min && $this->actualValue < $max;
     }
 
     /**

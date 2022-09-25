@@ -3,6 +3,9 @@ namespace AdinanCenci\JsonLines\Search\Condition;
 
 class OrConditionGroup extends AndConditionGroup
 {
+    /**
+     * @inheritDoc
+     */
     public function evaluate($data) : bool
     {
         foreach ($this->conditions as $condition) {
