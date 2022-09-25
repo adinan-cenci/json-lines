@@ -3,6 +3,9 @@ namespace AdinanCenci\JsonLines\Search\Operator;
 
 class Likes extends OperatorBase implements OperatorInterface 
 {
+    /**
+     * @inheritDoc
+     */
     public function matches() : bool
     {
         if (is_scalar($this->actualValue) && is_scalar($this->valueToCompare)) {

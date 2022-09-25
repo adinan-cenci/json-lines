@@ -3,6 +3,9 @@ namespace AdinanCenci\JsonLines\Search\Operator;
 
 class Between extends OperatorBase implements OperatorInterface 
 {
+    /**
+     * @inheritDoc
+     */
     public function matches() : bool
     {
         if (! is_numeric($this->actualValue)) {
@@ -15,22 +18,24 @@ class Between extends OperatorBase implements OperatorInterface
         return $this->actualValue >= $min && $this->actualValue <= $max;
     }
 
-    protected function validate() 
+    /**
+     * @inheritDoc
+     */
+    protected function validateValueToCompare() : void
     {
-        if (!is_array($this->valueToCompare)) {
-            throw new \Exception('Invalid data to compare given to BETWEEN operator, expected array, ' . gettype($this->valueToCompare) . ' given');
+        if (! is_array($this->valueToCompare)) {
+            throw new \InvalidArgumentException($this->invalidDataError('BETWEEN', 'array', gettype($this->valueToCompare)));
         }
 
-        if (count($this->valueToCompare) < 2) {
-            throw new \Exception('Invalid data to compare given to BETWEEN operator, expected array with two numeric values');
-        }
-
-        if (!is_numeric(reset($this->valueToCompare)) || !is_numeric(end($this->valueToCompare))) {
-            throw new \Exception('Invalid data to compare given to BETWEEN operator, expected array with two numeric values');
+        if (
+            count($this->valueToCompare) < 2 ||
+            (!is_numeric(reset($this->valueToCompare)) || !is_numeric(end($this->valueToCompare)))
+        ) {
+            throw new \InvalidArgumentException($this->invalidDataError('BETWEEN', 'array with two numeric values', ''));
         }
     }
 
-    protected static function normalizeScalar($data) 
+    protected function normalizeScalar($data) 
     {
         if (is_numeric($data)) {
             return $data;

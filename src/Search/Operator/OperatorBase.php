@@ -21,12 +21,15 @@ abstract class OperatorBase implements OperatorInterface
 
     }
 
-    protected function validateValueToCompare() 
+    /**
+     * @throws \InvalidArgumentException
+     */
+    protected function validateValueToCompare() : void
     {
-        return true;
+        
     }
 
-    protected static function isScalar($data) : bool
+    protected function isScalar($data) : bool
     {
         if (is_bool($data)) {
             return true;
@@ -39,20 +42,18 @@ abstract class OperatorBase implements OperatorInterface
         return is_scalar($data);
     }
 
-    protected static function normalize($data) 
+    protected function normalize($data) 
     {
-        $class = get_called_class();
-
         $data = is_object($data) 
             ? (array) $data 
             : $data;
 
         return is_array($data) 
-            ? $class::normalizeArray($data)
-            : $class::normalizeScalar($data);
+            ? $this->normalizeArray($data)
+            : $this->normalizeScalar($data);
     }
 
-    protected static function normalizeScalar($data) 
+    protected function normalizeScalar($data) 
     {
         if (is_bool($data)) {
             return $data;
@@ -61,30 +62,25 @@ abstract class OperatorBase implements OperatorInterface
         return trim( strtolower( (string) $data) );
     }
 
-    protected static function normalizeArray(array $data) : array
+    protected function normalizeArray(array $data) : array
     {
-        $class = get_called_class();
-
         foreach ($data as $key => $value) {
-            if (self::isScalar($value)) {
-                $data[$key] = $class::normalizeScalar($value);
+            if ($this->isScalar($value)) {
+                $data[$key] = $this->normalizeScalar($value);
             }
         }
 
-        if (self::isNumericalArray($data)) {
+        if ($this->isNumericalArray($data)) {
             sort($data);
         }
 
         return $data;
     }
 
-    protected static function strToLower($data) 
+    protected function invalidDataError(string $operatorName, string $expected, string $actual) : string
     {
-        if (is_string($data)) {
-            return strtolower($data);
-        }
-
-        return $data;
+        return 'Invalid data given to ' . $operatorName . ' operator, expected ' . 
+        $expected . ( $actual ? (', ' . $actual . ' given.') : '' );
     }
 
     protected static function isNumericalArray(array $array) : bool

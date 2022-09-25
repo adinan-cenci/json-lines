@@ -7,7 +7,7 @@ use AdinanCenci\JsonLines\Search\Operator\Between;
 
 final class OperatorBetweenTest extends Base
 {
-    public function testCompare() 
+    public function testCompareValueInRange() 
     {
         $actualValue = 5;
         $minMax = [0, 10];
@@ -16,7 +16,7 @@ final class OperatorBetweenTest extends Base
         $this->assertTrue($operator->matches());
     }
 
-    public function testCompareFalse() 
+    public function testCompareValueOutOfRange() 
     {
         $actualValue = 15;
         $minMax = [0, 10];
@@ -25,12 +25,21 @@ final class OperatorBetweenTest extends Base
         $this->assertFalse($operator->matches());
     }
 
-    public function testNonsense() 
+    public function testDescendingRange() 
     {
         $actualValue = 15;
         $minMax = [10, 0];
 
         $operator = new Between($actualValue, $minMax);
         $this->assertFalse($operator->matches());
+    }
+
+    public function testInvalidRange() 
+    {
+        $actualValue = 15;
+        $minMax = ['foo', 'bar'];
+
+        $this->expectException('InvalidArgumentException');
+        $operator = new Between($actualValue, $minMax);
     }
 }

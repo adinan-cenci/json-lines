@@ -3,6 +3,9 @@ namespace AdinanCenci\JsonLines\Search\Operator;
 
 class LessOrEqualTo extends LessThen implements OperatorInterface 
 {
+    /**
+     * @inheritDoc
+     */
     public function matches() : bool
     {
         if (! is_numeric($this->actualValue)) {

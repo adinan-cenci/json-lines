@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AdinanCenci\JsonLines\Tests;
 
 use AdinanCenci\JsonLines\Search\Operator\LessThan;
+use AdinanCenci\JsonLines\Search\Exception\InvalidData;
 
 final class OperatorLessThanTest extends Base
 {
@@ -25,12 +26,11 @@ final class OperatorLessThanTest extends Base
         $this->assertFalse($operator->matches());
     }
 
-    public function testCompareToFalse() 
+    public function testCompareToBoolean() 
     {
         $actualValue = 10;
         $toCompare = false;
-
+        $this->expectException('InvalidArgumentException');
         $operator = new LessThan($actualValue, $toCompare);
-        $this->assertFalse($operator->matches());
     }
 }

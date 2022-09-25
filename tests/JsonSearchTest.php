@@ -47,7 +47,7 @@ class JsonSearchTest extends Base
         $this->assertEquals(4, count($results));
     }
 
-    public function testOrSearchMultilevalConditions() 
+    public function testOrSearchMultiLevelConditions() 
     {
         $file = new JsonLines('./tests/template-search.jsonl');
         $search = $file->search('OR');

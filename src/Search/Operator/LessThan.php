@@ -1,10 +1,11 @@
 <?php 
 namespace AdinanCenci\JsonLines\Search\Operator;
 
-use AdinanCenci\JsonLines\Search\Operator\Exception\InvalidOperatorData;
-
 class LessThan extends OperatorBase implements OperatorInterface 
 {
+    /**
+     * @inheritDoc
+     */
     public function matches() : bool
     {
         if (! is_numeric($this->actualValue)) {
@@ -14,14 +15,17 @@ class LessThan extends OperatorBase implements OperatorInterface
         return $this->actualValue < $this->valueToCompare;
     }
 
-    protected function validateValueToCompare() 
+    /**
+     * @inheritDoc
+     */
+    protected function validateValueToCompare() : void
     {
-        if (!is_numeric($this->valueToCompare)) {
-            throw InvalidOperatorData::invalidType('LESS THAN', 'numeric', gettype($this->valueToCompare));
+        if (! is_numeric($this->valueToCompare)) {
+            throw new \InvalidArgumentException($this->invalidDataError('LESS THAN', 'numeric', gettype($this->valueToCompare)), \E_USER_ERROR);
         }
     }
 
-    protected static function normalizeScalar($data) 
+    protected function normalizeScalar($data) 
     {
         if (is_numeric($data)) {
             return $data;
