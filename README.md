@@ -3,7 +3,7 @@
 A library to read and write files in the [json lines](https://jsonlines.org/) format.
 **Note**: Still in early development.
 
-<br>
+<br><br>
 
 ## How to use it
 
@@ -66,9 +66,7 @@ $objects = [
 $objects->addObjects($objects);
 ```
 
-<br>
-
-<br>
+<br><br>
 
 **Add several objects in the middle of the file**
 
@@ -150,30 +148,30 @@ $file->deleteObjects($lines);
 
 ## Search
 
-Equals operator.
+**Equals operator**
 
 ```php
 $search = $file->search();
-$search->condition('title', 'foo bar', '=');
+$search->condition('title', 'Iliad', '=');
 $results = $search->find();
-// Will match entries where the "title" property equals "foo bar".
+// Will match entries where the "title" property equals "Iliad".
 ```
 
 <br><br>
 
-In operator.
+**In operator**
 
 ```php
 $search = $file->search();
-$search->condition('title', ['foo', ' bar'], 'IN');
+$search->condition('title', ['Iliad', ' Odyssey'], 'IN');
 $results = $search->find();
-// Will match entries where the "title" property equals either as "foo" 
-// or "bar" ( case insensitive ).
+// Will match entries where the "title" property equals to either 
+// "Iliad" or "Odyssey" ( case insensitive ).
 ```
 
 <br><br>
 
-Like operator.
+Like operator
 
 ```php
 $search = $file->search();
@@ -181,6 +179,52 @@ $search->condition('title', 'foo', 'LIKE');
 $results = $search->find();
 // Will match entries where the "title" property contains the word "foo"
 // e.g: "foo", "foo bar", "foofighters" etc ( case insensitive ).
+```
+
+<br><br>
+
+### Multiple conditions
+
+You may add multiple conditions to a search.
+By default all of the conditions must be met.
+
+```php
+$search = $file->search();
+$search
+  ->condition('band', 'Iron Maiden', '=')
+  ->condition('release', 2000, '<');
+$results = $search->find();
+// Will match entries for Iron Maiden from before the yar 2000.
+```
+
+But you can set so only one may be met.
+
+```php
+$search = $file->search('OR');
+$search
+  ->condition('band', 'Blind Guardian', '=')
+  ->condition('band', 'Demons & Wizards, '=');
+$results = $search->find();
+// Will match entries for Either Blind Guardian or Demons & Wizards.
+```
+
+<br><br>
+
+### Conditions groups
+
+You may also group conditons.
+
+```php
+$search = $file->search('OR');
+$search->andConditionGroup()
+  ->condition('band', 'Angra', '=')
+  ->condition('release', 2010, '<');
+$search->andConditionGroup()
+  ->condition('band', 'Almah', '=')
+  ->condition('release', 2013, '>');
+$results = $search->find();
+// Will match entries for Angra from before 2010 OR
+// entries for Almah from after 2013
 ```
 
 <br><br>
