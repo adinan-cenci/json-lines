@@ -38,7 +38,7 @@ class Condition implements ConditionInterface
         }
 
         $this->operatorClass = $class;
-        $this->negation       = $negation;
+        $this->negation      = $negation;
     }
 
     /**
@@ -56,7 +56,7 @@ class Condition implements ConditionInterface
     }
 
     /**
-     * Retrieves the property from $data we are going to evaluate.
+     * Retrieves from $data the property we are going to evaluate.
      * 
      * @param array|\stdClass $data
      * @param array $property
@@ -77,11 +77,22 @@ class Condition implements ConditionInterface
         return $data;
     }
 
-    protected function instantiateOperator($actualValue, $valueToCompare, $operatorClass) 
+    /**
+     * @param mixed $acualValue
+     * @param mixed $valueToCompare
+     * @param string $operatorClass The class to be instantiated.
+     * @return OperatorInterface
+     */
+    protected function instantiateOperator($actualValue, $valueToCompare, $operatorClass) : OperatorInterface
     {
         return new $operatorClass($actualValue, $valueToCompare);
     }
 
+    /**
+     * @param string $operatorId A string representing an operation.
+     * @param bool $negation Turns true if $operatorId is negating the operation.
+     * @return string|null The class name for the operation.
+     */
     protected function getOperatorClass(string $operatorId, &$negation = false) : ?string
     {
         $negation = substr_count($operatorId, '!') || substr_count($operatorId, 'NOT');

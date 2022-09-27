@@ -84,7 +84,7 @@ class FileIterator implements \Iterator
         if (! file_exists($this->fileName)) {
             return false;
         }
-        
+
         return $this->handle = fopen($this->fileName, 'r');
     }
 }

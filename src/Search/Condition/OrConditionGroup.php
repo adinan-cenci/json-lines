@@ -1,7 +1,7 @@
 <?php 
 namespace AdinanCenci\JsonLines\Search\Condition;
 
-class OrConditionGroup extends AndConditionGroup
+class OrConditionGroup extends AndConditionGroup implements ConditionInterface, ConditionGroupInterface 
 {
     /**
      * @inheritDoc

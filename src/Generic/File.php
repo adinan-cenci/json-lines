@@ -34,11 +34,11 @@ class File
     }
 
     /**
-     * If a line is not specified, 
-     * $content will be added at the end of the file.
+     * If $line is not specified, $content will be added at the end of the file.
      * 
      * @param string $content
      * @param int $line
+     * 
      * @throws DirectoryDoesNotExist
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
@@ -49,11 +49,10 @@ class File
     }
 
     /**
-     * If $toTheEndOfTheFile is set to false, the placement of the lines
-     * will reflect their keys.
-     * 
      * @param string[] $lines A numerical array: [ lineNumber => content ].
-     * @param bool $toTheEndOfTheFile
+     * @param bool $toTheEndOfTheFile If true, places the lines to the end of the file.
+     * If false, the placement will reflect the array's keys.
+     * 
      * @throws DirectoryDoesNotExist
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
@@ -72,8 +71,11 @@ class File
     }
 
     /**
+     * Will ovewrite the line if already set, unlike ::addLine()
+     * 
      * @param int $line
      * @param string $content 
+     * 
      * @throws DirectoryDoesNotExist
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
@@ -84,7 +86,9 @@ class File
     }
 
     /**
+     * Will ovewrite the lines if already set, unlike ::addLines()
      * @param string[] $lines A numerical array: [ lineNumber => content ].
+     * 
      * @throws DirectoryDoesNotExist
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
@@ -99,6 +103,7 @@ class File
     /**
      * @param int $line
      * @return string|null
+     * 
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
@@ -111,6 +116,7 @@ class File
     /**
      * @param int[] $lines
      * @return (string|null)[]
+     * 
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
@@ -124,6 +130,7 @@ class File
 
     /**
      * @param int $line
+     * 
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
@@ -134,6 +141,7 @@ class File
 
     /**
      * @param int[] $lines
+     * 
      * @throws FileDoesNotExist
      * @throws FileIsNotReadable
      */
@@ -144,20 +152,30 @@ class File
             ->commit();
     }
 
+    /**
+     * Returns an instance of the class used to edit the file.
+     * 
+     * @return Crud
+     */
     public function crud() : Crud
     {
         return new Crud($this->fileName);
     }
 
     /**
-     * @param bool $emptyLastLine Will indicate if the last line is empty or not.
-     * @return int
+     * @param bool $emptyLastLine Will turn true if the last line of the file is empty.
+     * @return int The number of lines in the file.
      */
     public function countLines(&$emptyLastLine = false) : int
     {
         return self::countLinesOnFile($this->fileName, $emptyLastLine);
     }
 
+    /**
+     * @param string $fileName
+     * @param bool $emptyLastLine Will turn true if the last line of the file is empty.
+     * @return int The number of lines in the file.
+     */
     public static function countLinesOnFile(string $fileName, &$emptyLastLine = false) : int
     {
         if (! file_exists($fileName)) {
@@ -166,7 +184,7 @@ class File
 
         $handle = fopen($fileName, 'r');
         $lineCount = 1;
-  
+
         while(! feof($handle)){
             $line = fgets($handle, 4096);
             $lineCount = $lineCount + substr_count($line, PHP_EOL);
@@ -179,7 +197,8 @@ class File
     }
 
     /**
-     * @param bool $ignoreEmptyLine If set to true and the last line is empty, it will return the second to last line.
+     * @param bool $ignoreEmptyLine If true and the last line of the file is empty,
+     * it will return the second to last line.
      * @return int
      */
     public function nameLastLine(bool $ignoreEmptyLine = false) : int
@@ -187,6 +206,12 @@ class File
         return self::getLastLine($this->fileName, $ignoreEmptyLine);
     }
 
+    /**
+     * @param string $fileName
+     * @param bool $ignoreEmptyLine If true and the last line of the file is empty,
+     * it will return the second to last line.
+     * @return int
+     */
     public static function getLastLine(string $fileName, bool $ignoreEmptyLine = false) : int
     {
         $lastLine = self::countLinesOnFile($fileName, $emptyLastLine);

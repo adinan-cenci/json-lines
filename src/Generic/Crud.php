@@ -10,14 +10,22 @@ use AdinanCenci\JsonLines\Exception\FileIsNotReadable;
 class Crud 
 {
     protected string $fileName = '';
+
+    /** @var int $finalLine Property to controll the loop. */
     protected int $finalLine = 0;
+
     protected FileIterator $iterator;
 
-    //-----------------------------
-
+    /** @var int[] $linesToGet */
     protected array $linesToGet = [];
+
+    /** @var string[] $linesToAdd */
     protected array $linesToAdd = [];
+
+    /** @var string[] $linesToSet */
     protected array $linesToSet = [];
+
+    /** @var int[] $linesToDelete */
     protected array $linesToDelete = [];
 
     //-----------------------------
@@ -28,6 +36,8 @@ class Crud
     //-----------------------------
 
     protected int $newFileLine = 0;
+
+    /** @var (string|null)[] $linesRetrieved */
     protected array $linesRetrieved = [];
 
     //-----------------------------
@@ -163,9 +173,8 @@ class Crud
         }
     }
 
-    protected function read() 
+    protected function read() : void
     {
-        $xx = $this->iterator->currentLine;
         if (in_array($this->iterator->currentLine, $this->linesToGet)) {
             $content = $this->iterator->current();
             $content = rtrim($content, "\n");
@@ -189,21 +198,19 @@ class Crud
 
     protected function writeToTempFile(string $newContent) : void
     {
-        $lastLine = $this->newFileLine == $this->finalLine;
-        $newContent = $this->sanitizeLine($newContent, !$lastLine);
+        $newContent = $this->sanitizeLine($newContent);
         fwrite($this->tempFile, $newContent);
     }
 
-    protected function sanitizeLine(string $content, bool $appendLineBreak = true) : string
+    protected function sanitizeLine(string $content) : string
     {
         $string = (string) $content;
         $string = str_replace(["\n", "\r"], '', $string);
-        //$string .= $appendLineBreak ? "\n" : '';
         $string .= "\n";
         return $string;
     }
 
-    protected function validateFileForWriting() 
+    protected function validateFileForWriting() : void
     {
         $dir = dirname($this->fileName) . '/';
 
@@ -220,7 +227,7 @@ class Crud
         }
     }
 
-    protected function validateFileForReading() 
+    protected function validateFileForReading() : void
     {
         if (! file_exists($this->fileName)) {
             throw new FileDoesNotExist($this->fileName);
@@ -231,13 +238,13 @@ class Crud
         }
     }
 
-    protected function validateFileForDeleting() 
+    protected function validateFileForDeleting() : void
     {
-        if (!file_exists($this->fileName)) {
+        if (! file_exists($this->fileName)) {
             throw new FileDoesNotExist($this->fileName);
         }
 
-        if (!is_writable($this->fileName)) {
+        if (! is_writable($this->fileName)) {
             throw new FileIsNotWritable($this->fileName);
         }
     }

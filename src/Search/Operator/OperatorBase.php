@@ -26,7 +26,7 @@ abstract class OperatorBase implements OperatorInterface
      */
     protected function validateValueToCompare() : void
     {
-        
+
     }
 
     protected function isScalar($data) : bool

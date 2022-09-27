@@ -11,7 +11,7 @@ class Search implements ConditionGroupInterface
     protected JsonLines $jsonLines;
     protected ConditionGroupInterface $mainConditionGroup;
 
-    public function __construct(JsonLines $jsonLines, $operator = 'AND') 
+    public function __construct(JsonLines $jsonLines, string $operator = 'AND') 
     {
         $this->jsonLines = $jsonLines;
         $this->mainConditionGroup = $operator == 'OR'
@@ -22,6 +22,7 @@ class Search implements ConditionGroupInterface
     /**
      * It will iterate through the file and return the objects that match
      * the specified criteria.
+     * @return array
      */
     public function find() : array
     {

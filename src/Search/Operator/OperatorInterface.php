@@ -10,6 +10,7 @@ interface OperatorInterface
     public function __construct($actualValue, $valueToCompare);
 
     /**
+     * Compares the values and returns weather they match or not.
      * 
      * @return bool
      */
