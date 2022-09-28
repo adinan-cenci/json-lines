@@ -1,7 +1,7 @@
 <?php 
 namespace AdinanCenci\JsonLines\Search\Operator;
 
-class Between extends OperatorBase implements OperatorInterface 
+class BetweenOperator extends LessThanOperator implements OperatorInterface 
 {
     /**
      * @inheritDoc
@@ -33,14 +33,5 @@ class Between extends OperatorBase implements OperatorInterface
         ) {
             throw new \InvalidArgumentException($this->invalidDataError('BETWEEN', 'array with two numeric values', ''));
         }
-    }
-
-    protected function normalizeScalar($data) 
-    {
-        if (is_numeric($data)) {
-            return $data;
-        }
-
-        return parent::normalizeScalar($data);
     }
 }

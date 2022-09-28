@@ -1,7 +1,7 @@
 <?php 
 namespace AdinanCenci\JsonLines\Search\Operator;
 
-class IsNull extends OperatorBase implements OperatorInterface 
+class IsNullOperator extends OperatorBase implements OperatorInterface 
 {
     /**
      * @inheritDoc

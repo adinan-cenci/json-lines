@@ -1,7 +1,7 @@
 <?php 
 namespace AdinanCenci\JsonLines\Search\Operator;
 
-class GreaterOrEqualTo extends LessThan implements OperatorInterface 
+class GreaterThanOperator extends LessThanOperator implements OperatorInterface 
 {
     /**
      * @inheritDoc
@@ -12,6 +12,6 @@ class GreaterOrEqualTo extends LessThan implements OperatorInterface
             return false;
         }
 
-        return $this->actualValue >= $this->valueToCompare;
+        return $this->actualValue > $this->valueToCompare;
     }
 }

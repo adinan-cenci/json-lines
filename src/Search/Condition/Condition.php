@@ -12,15 +12,15 @@ class Condition implements ConditionInterface
     protected string $operatorClass;
     protected bool $negate = false;
 
-    const EQUALS_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\Equals';
-    const INCLUDES_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\Includes';
-    const LIKES_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\Likes';
-    const BETWEEM_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\Between';
-    const IS_NULL_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\IsNull';
-    const LESS_THEN_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\LessThan';
-    const GREATER_THEN_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\GreaterThan';
-    const LESS_OR_EQUAL_TO_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\LessOrEqualTo';
-    const GREATER_OR_EQUAL_TO_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\GreaterOrEqualTo';
+    const EQUALS_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\EqualOperator';
+    const INCLUDES_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\IncludeOperator';
+    const LIKES_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\LikeOperator';
+    const BETWEEM_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\BetweenOperator';
+    const IS_NULL_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\IsNullOperator';
+    const LESS_THEN_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\LessThanOperator';
+    const GREATER_THEN_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\GreaterThanOperator';
+    const LESS_OR_EQUAL_TO_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\LessThanOrEqualOperator';
+    const GREATER_OR_EQUAL_TO_OPERATOR = 'AdinanCenci\JsonLines\Search\Operator\GreaterThanOrEqualOperator';
 
     /**
      * @param array|string[] $property Either a simle string or an array of strings to reache nested properties.
@@ -95,7 +95,9 @@ class Condition implements ConditionInterface
      */
     protected function getOperatorClass(string $operatorId, &$negation = false) : ?string
     {
-        $negation = substr_count($operatorId, '!') || substr_count($operatorId, 'NOT');
+        $negation = substr_count($operatorId, '!') || 
+          substr_count($operatorId, 'NOT') || 
+          $operatorId == 'UNLIKE';
 
         switch ($operatorId) {
             case '=' :

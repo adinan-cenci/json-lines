@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AdinanCenci\JsonLines\Tests;
 
-use AdinanCenci\JsonLines\Search\Operator\IsNull;
+use AdinanCenci\JsonLines\Search\Operator\IsNullOperator;
 
 final class OperatorIsNullTest extends Base
 {
@@ -11,7 +11,7 @@ final class OperatorIsNullTest extends Base
     {
         $actualValue = null;
 
-        $operator = new IsNull($actualValue, null);
+        $operator = new IsNullOperator($actualValue, null);
         $this->assertTrue($operator->matches());
     }
 
@@ -19,7 +19,7 @@ final class OperatorIsNullTest extends Base
     {
         $actualValue = false;
 
-        $operator = new IsNull($actualValue, null);
+        $operator = new IsNullOperator($actualValue, null);
         $this->assertFalse($operator->matches());
     }
 }

@@ -151,10 +151,9 @@ $file->deleteObjects($lines);
 **Equals operator**
 
 ```php
-$search = $file->search();
 $search->condition('title', 'Iliad', '=');
-$results = $search->find();
-// Will match entries where the "title" property equals "Iliad".
+// Will match entries where the "title" property equals "Iliad" 
+// ( case insensitive ).
 ```
 
 <br><br>
@@ -162,23 +161,52 @@ $results = $search->find();
 **In operator**
 
 ```php
-$search = $file->search();
 $search->condition('title', ['Iliad', ' Odyssey'], 'IN');
-$results = $search->find();
 // Will match entries where the "title" property equals to either 
 // "Iliad" or "Odyssey" ( case insensitive ).
 ```
 
 <br><br>
 
-Like operator
+**Like operator**
 
 ```php
-$search = $file->search();
 $search->condition('title', 'foo', 'LIKE');
-$results = $search->find();
 // Will match entries where the "title" property contains the word "foo"
 // e.g: "foo", "foo bar", "foofighters" etc ( case insensitive ).
+
+$search->condition('title', ['foo', 'bar'], 'LIKE');
+// It also accept arrays. This will match match 
+// "fool", "barrier", "barista" etc.
+```
+
+<br><br>
+
+**Number comparison operators**
+
+It also supports "less than", "greater than", "less than or equal", "greater than or equal" and "between".
+
+```php
+$search
+  ->condition('year', 2022, '<')
+  ->condition('year', 1990, '>')
+  ->condition('age', 60, '<=')
+  ->condition('age', 18, '>=')
+  ->condition('price', [10, 50], 'BETWEEN');
+```
+
+<br><br>
+
+### Negating operators
+
+You may also negate the operators.
+
+```php
+$search
+  ->condition('title', 'Iliad', '!=') // Different to ( case insensitive ).
+  ->condition('title', ['Iliad', ' Odyssey'], 'NOT IN') // case insensitive.
+  ->condition('price', [10, 50], 'NOT BETWEEN')
+  ->condition('title', ['foo', 'bar'], 'UNLIKE');
 ```
 
 <br><br>
@@ -197,7 +225,7 @@ $results = $search->find();
 // Will match entries for Iron Maiden from before the yar 2000.
 ```
 
-But you can set so only one may be met.
+But you may make it so only one needs to be met.
 
 ```php
 $search = $file->search('OR');
@@ -216,12 +244,15 @@ You may also group conditons.
 
 ```php
 $search = $file->search('OR');
+
 $search->andConditionGroup()
   ->condition('band', 'Angra', '=')
   ->condition('release', 2010, '<');
+
 $search->andConditionGroup()
   ->condition('band', 'Almah', '=')
   ->condition('release', 2013, '>');
+
 $results = $search->find();
 // Will match entries for Angra from before 2010 OR
 // entries for Almah from after 2013

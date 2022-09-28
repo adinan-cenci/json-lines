@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AdinanCenci\JsonLines\Tests;
 
-use AdinanCenci\JsonLines\Search\Operator\Likes;
+use AdinanCenci\JsonLines\Search\Operator\LikeOperator;
 
 final class OperatorLikesTest extends Base
 {
@@ -12,16 +12,16 @@ final class OperatorLikesTest extends Base
         $actualValue = 'Highland Glory';
         $toCompare = 'Highland Glory';
 
-        $operator = new Likes($actualValue, $toCompare);
+        $operator = new LikeOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
-    
+
     public function testCompareStringsCaseInsensitive()
     {
         $actualValue = 'Highland Glory';
         $toCompare = 'HIGHLAND GLORY';
 
-        $operator = new Likes($actualValue, $toCompare);
+        $operator = new LikeOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -30,7 +30,7 @@ final class OperatorLikesTest extends Base
         $actualValue = 'Highland Glory';
         $toCompare = 'glory';
 
-        $operator = new Likes($actualValue, $toCompare);
+        $operator = new LikeOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -39,7 +39,7 @@ final class OperatorLikesTest extends Base
         $actualValue = 'Highland Glory';
         $toCompare = ['glory'];
 
-        $operator = new Likes($actualValue, $toCompare);
+        $operator = new LikeOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -48,7 +48,7 @@ final class OperatorLikesTest extends Base
         $actualValue = ['Highland Glory'];
         $toCompare = 'Highland Glory';
 
-        $operator = new Likes($actualValue, $toCompare);
+        $operator = new LikeOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -57,7 +57,7 @@ final class OperatorLikesTest extends Base
         $actualValue = ['Highland Glory'];
         $toCompare = 'HIGHLAND GLORY';
 
-        $operator = new Likes($actualValue, $toCompare);
+        $operator = new LikeOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -66,7 +66,7 @@ final class OperatorLikesTest extends Base
         $actualValue = ['Highland Glory'];
         $toCompare = 'glory';
 
-        $operator = new Likes($actualValue, $toCompare);
+        $operator = new LikeOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -75,7 +75,7 @@ final class OperatorLikesTest extends Base
         $actualValue = ['Highland Glory'];
         $toCompare = ['Highland Glory'];
 
-        $operator = new Likes($actualValue, $toCompare);
+        $operator = new LikeOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -84,7 +84,7 @@ final class OperatorLikesTest extends Base
         $actualValue = ['Highland Glory'];
         $toCompare = ['Glory'];
 
-        $operator = new Likes($actualValue, $toCompare);
+        $operator = new LikeOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -93,7 +93,7 @@ final class OperatorLikesTest extends Base
         $actualValue = ['Highland Glory'];
         $toCompare = ['HIGHLAND GLORY'];
 
-        $operator = new Likes($actualValue, $toCompare);
+        $operator = new LikeOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -102,7 +102,7 @@ final class OperatorLikesTest extends Base
         $actualValue = ['Highland Glory', 'Gloryhammer'];
         $toCompare = ['Highland Glory'];
 
-        $operator = new Likes($actualValue, $toCompare);
+        $operator = new LikeOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
 
         //---------
@@ -110,7 +110,7 @@ final class OperatorLikesTest extends Base
         $actualValue = ['Highland Glory', 'Gloryhammer'];
         $toCompare = ['hammer'];
 
-        $operator = new Likes($actualValue, $toCompare);
+        $operator = new LikeOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
 
         //---------
@@ -118,7 +118,7 @@ final class OperatorLikesTest extends Base
         $actualValue = ['Highland Glory'];
         $toCompare = ['Highland Glory', 'Gloryhammer'];
 
-        $operator = new Likes($actualValue, $toCompare);
+        $operator = new LikeOperator($actualValue, $toCompare);
         $this->assertFalse($operator->matches());
     }
 }

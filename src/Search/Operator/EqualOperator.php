@@ -1,7 +1,7 @@
 <?php 
 namespace AdinanCenci\JsonLines\Search\Operator;
 
-class Equals extends OperatorBase implements OperatorInterface 
+class EqualOperator extends OperatorBase implements OperatorInterface 
 {
     /**
      * @inheritDoc

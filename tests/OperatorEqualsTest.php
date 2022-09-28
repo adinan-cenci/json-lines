@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AdinanCenci\JsonLines\Tests;
 
-use AdinanCenci\JsonLines\Search\Operator\Equals;
+use AdinanCenci\JsonLines\Search\Operator\EqualOperator;
 
 final class OperatorEqualsTest extends Base
 {
@@ -13,7 +13,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = 'Highland Glory';
         $toCompare = 'Highland Glory';
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -22,7 +22,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = 'Highland Glory';
         $toCompare = 'HIGHLAND GLORY';
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -31,7 +31,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = null;
         $toCompare = '';
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -40,7 +40,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = false;
         $toCompare = '';
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -49,7 +49,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = 5;
         $toCompare = '5';
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -58,7 +58,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = 0;
         $toCompare = '';
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertFalse($operator->matches());
     }
 
@@ -67,7 +67,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = true;
         $toCompare = '0';
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertFalse($operator->matches());
     }
 
@@ -76,7 +76,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = true;
         $toCompare = '1';
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -86,7 +86,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = ['Highland Glory'];
         $toCompare = 'Highland Glory';
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertFalse($operator->matches());
     }
 
@@ -95,7 +95,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = ['Highland Glory'];
         $toCompare = ['Highland Glory'];
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -104,7 +104,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = ['Highland Glory'];
         $toCompare = ['HIGHLAND GLORY'];
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -113,7 +113,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = ['Highland Glory', 'Gloryhammer'];
         $toCompare = ['Highland Glory'];
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertFalse($operator->matches());
 
         //----------------------------
@@ -121,7 +121,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = ['Highland Glory'];
         $toCompare = ['Highland Glory', 'Gloryhammer'];
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertFalse($operator->matches());
     }
 
@@ -130,7 +130,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = ['Highland Glory', 'Gloryhammer'];
         $toCompare = ['Gloryhammer', 'Highland Glory'];
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -139,7 +139,7 @@ final class OperatorEqualsTest extends Base
         $actualValue = ['first' => 'Highland Glory', 'second' => 'Gloryhammer'];
         $toCompare = ['second' => 'Gloryhammer', 'first' => 'Highland Glory'];
 
-        $operator = new Equals($actualValue, $toCompare);
+        $operator = new EqualOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 }

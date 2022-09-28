@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AdinanCenci\JsonLines\Tests;
 
-use AdinanCenci\JsonLines\Search\Operator\GreaterThan;
+use AdinanCenci\JsonLines\Search\Operator\GreaterThanOperator;
 
 final class OperatorGreaterThanTest extends Base
 {
@@ -12,7 +12,7 @@ final class OperatorGreaterThanTest extends Base
         $actualValue = 10;
         $toCompare = 5;
 
-        $operator = new GreaterThan($actualValue, $toCompare);
+        $operator = new GreaterThanOperator($actualValue, $toCompare);
         $this->assertTrue($operator->matches());
     }
 
@@ -21,7 +21,7 @@ final class OperatorGreaterThanTest extends Base
         $actualValue = 5;
         $toCompare = 10;
 
-        $operator = new GreaterThan($actualValue, $toCompare);
+        $operator = new GreaterThanOperator($actualValue, $toCompare);
         $this->assertFalse($operator->matches());
     }
 
@@ -31,6 +31,6 @@ final class OperatorGreaterThanTest extends Base
         $toCompare = 'foobar';
 
         $this->expectException('InvalidArgumentException');
-        $operator = new GreaterThan($actualValue, $toCompare);
+        $operator = new GreaterThanOperator($actualValue, $toCompare);
     }
 }

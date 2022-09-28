@@ -1,7 +1,7 @@
 <?php 
 namespace AdinanCenci\JsonLines\Search\Operator;
 
-class Likes extends OperatorBase implements OperatorInterface 
+class LikeOperator extends OperatorBase implements OperatorInterface 
 {
     /**
      * @inheritDoc

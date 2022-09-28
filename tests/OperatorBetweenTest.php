@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace AdinanCenci\JsonLines\Tests;
 
-use AdinanCenci\JsonLines\Search\Operator\Between;
+use AdinanCenci\JsonLines\Search\Operator\BetweenOperator;
 
 final class OperatorBetweenTest extends Base
 {
@@ -12,7 +12,7 @@ final class OperatorBetweenTest extends Base
         $actualValue = 5;
         $minMax = [0, 10];
 
-        $operator = new Between($actualValue, $minMax);
+        $operator = new BetweenOperator($actualValue, $minMax);
         $this->assertTrue($operator->matches());
     }
 
@@ -21,7 +21,7 @@ final class OperatorBetweenTest extends Base
         $actualValue = 15;
         $minMax = [0, 10];
 
-        $operator = new Between($actualValue, $minMax);
+        $operator = new BetweenOperator($actualValue, $minMax);
         $this->assertFalse($operator->matches());
     }
 
@@ -30,7 +30,7 @@ final class OperatorBetweenTest extends Base
         $actualValue = 15;
         $minMax = [10, 0];
 
-        $operator = new Between($actualValue, $minMax);
+        $operator = new BetweenOperator($actualValue, $minMax);
         $this->assertFalse($operator->matches());
     }
 
@@ -40,6 +40,6 @@ final class OperatorBetweenTest extends Base
         $minMax = ['foo', 'bar'];
 
         $this->expectException('InvalidArgumentException');
-        $operator = new Between($actualValue, $minMax);
+        $operator = new BetweenOperator($actualValue, $minMax);
     }
 }

@@ -1,7 +1,7 @@
 <?php 
 namespace AdinanCenci\JsonLines\Search\Operator;
 
-class Includes extends OperatorBase implements OperatorInterface 
+class IncludeOperator extends OperatorBase implements OperatorInterface 
 {
     /**
      * @inheritDoc
