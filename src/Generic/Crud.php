@@ -110,7 +110,7 @@ class Crud
         $this->finalLine = $this->getNumberOfLinesToProcess();
 
         if ($this->linesToAdd || $this->linesToSet || $this->linesToDelete) {
-            $this->tempName   = uniqid() . '.tmp';
+            $this->tempName   = $this->tempName();
             $this->tempFile   = fopen($this->tempName, 'w');
         }
 
@@ -247,5 +247,16 @@ class Crud
         if (! is_writable($this->fileName)) {
             throw new FileIsNotWritable($this->fileName);
         }
+    }
+
+    protected function tempName() : string
+    {
+        return $this->getTempDir() . uniqid() . '.tmp';
+    }
+
+    protected function getTempDir() : string
+    {
+        $tempDir = sys_get_temp_dir();
+        return rtrim($tempDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
     }
 }
