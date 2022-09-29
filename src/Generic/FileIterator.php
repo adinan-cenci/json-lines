@@ -3,14 +3,21 @@ namespace AdinanCenci\JsonLines\Generic;
 
 class FileIterator implements \Iterator 
 {
-    protected $fileName          = null;
+    protected string $fileName   = '';
     protected $handle            = null;
-    protected $currentLine       = null;
-    protected $currentLineNumber = 0;
+    protected $currentContent    = null;
+    protected int $currentLine   = 0;
 
-    public function __construct($fileName) 
+    public function __construct(string $fileName) 
     {
         $this->fileName = $fileName;
+    }
+
+    public function __get($var) 
+    {
+        if ($var == 'currentLine') {
+            return $this->currentLine;
+        }
     }
 
     public function current() 
@@ -19,26 +26,29 @@ class FileIterator implements \Iterator
             return null;
         }
 
-        return $this->currentLine;
+        return $this->currentContent;
     }
 
     public function key() 
     {
-        return $this->currentLineNumber;
+        return $this->currentLine;
     }
 
-    public function next() 
+    public function next() : void
     {
         if (! $this->getHandle()) {
             return;
         }
 
-        $this->currentLine = fgets($this->handle);
-        $this->currentLineNumber++;
-        return $this->currentLine;
+        if ($this->currentContent === false) {
+            return;
+        }
+
+        $this->currentContent = fgets($this->handle);
+        $this->currentLine++;
     }
 
-    public function rewind() 
+    public function rewind() : void
     {
         if (! $this->getHandle()) {
             return;
@@ -46,17 +56,17 @@ class FileIterator implements \Iterator
 
         fclose($this->handle);
         $this->handle = fopen($this->fileName, 'r');
-        $this->currentLine = fgets($this->handle);
-        $this->currentLineNumber = 0;
+        $this->currentContent = fgets($this->handle);
+        $this->currentLine = 0;
     }
 
-    public function valid() 
+    public function valid() : bool
     {
         if (! $this->getHandle()) {
             return false;
         }
 
-        $valid = $this->currentLine !== false;
+        $valid = $this->currentContent !== false;
 
         if (! $valid) {
             fclose($this->handle);
@@ -74,7 +84,7 @@ class FileIterator implements \Iterator
         if (! file_exists($this->fileName)) {
             return false;
         }
-        
+
         return $this->handle = fopen($this->fileName, 'r');
     }
 }

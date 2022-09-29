@@ -19,6 +19,6 @@ class JsonLinesIterator extends FileIterator
             return null;
         }
 
-        return JsonLines::jsonDecode($this->currentLine, $this->associative, $this->currentLineNumber);
+        return JsonLines::jsonDecode($this->currentContent, $this->associative, $this->currentLineNumber);
     }
 }

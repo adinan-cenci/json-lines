@@ -2,13 +2,14 @@
 namespace AdinanCenci\JsonLines;
 
 use AdinanCenci\JsonLines\Generic\File;
+use AdinanCenci\JsonLines\Search\Search;
 
 /**
  * @property \Iterator $objects
  */
 class JsonLines extends File 
 {
-    protected $associative = false;
+    protected bool $associative = false;
 
     public function __construct(string $fileName, bool $associative = false) 
     {
@@ -16,7 +17,7 @@ class JsonLines extends File
         $this->associative = $associative;
     }
 
-    public function __get($var) 
+    public function __get(string $var) 
     {
         if ($var == 'objects') {
             return new JsonLinesIterator($this->fileName, $this->associative);
@@ -26,21 +27,16 @@ class JsonLines extends File
     }
 
     /**
-     * Adds an object to the end of the file.
+     * Adds an object to the file.
      * 
      * @param array|object $object
-     * @param int $line Optional
+     * @param int $line
      * @throws DirectoryDoesNotExist
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function addObject($object, ?int $line = null) : void
+    public function addObject($object = null, int $line = -1) : void
     {
-        if ($line === null) {
-            $line = $this->countLines($lastLineEmpty);
-            $line -= $lastLineEmpty && $line > 0 ? 1 : 0;
-        }
-
         $this->addObjects([$line => $object]);
     }
 
@@ -50,14 +46,14 @@ class JsonLines extends File
      * @throws DirectoryIsNotWritable
      * @throws FileIsNotWritable
      */
-    public function addObjects(array $objects) : void
+    public function addObjects(array $objects, bool $toTheEndOfTheFile = true) : void
     {
         array_walk($objects, function(&$object) 
         {
             $object = json_encode($object);
         });
 
-        $this->addLines($objects);
+        $this->addLines($objects, $toTheEndOfTheFile);
     }
 
     /**
@@ -135,16 +131,23 @@ class JsonLines extends File
      */
     public function deleteObject(int $line) : void
     {
-        $this->deleteLine($line);
+        $this->deleteLines([$line]);
     }
 
-    public function search() : Search
+    public function search(string $operator = 'AND') : Search
     {
-        return new Search($this);
+        return new Search($this, $operator);
     }
 
-    public static function jsonDecode(?string $json, bool $associative = false, int $lineNumber) 
+    /**
+     * @return array|\stdClass|null
+     */
+    public static function jsonDecode($json, bool $associative = false, $lineNumber) 
     {
+        if ($json === null) {
+            return null;
+        }
+
         $json = rtrim($json, "\n");
 
         if ($json == '') {
