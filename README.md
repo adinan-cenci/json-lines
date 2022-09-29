@@ -72,7 +72,7 @@ $objects->addObjects($objects);
 
 ```php
 $objects = [
-// line => object
+// line => object / array
     2 => ['name' => 'foo'],
     6 => ['name' => 'bar'],
 ];
@@ -90,7 +90,7 @@ $object = ['foo' => 'bar'];
 $file->setObject($line, $object);
 ```
 
-The difference between `::addObject()` and `::setObject()` is that setObject will overwrite whatever is already present at line `$line`. 
+The difference between `::addObject()` and `::setObject()` is that `::setObject()` will overwrite whatever is already present at `$line`. 
 
 <br><br>
 
@@ -98,7 +98,7 @@ The difference between `::addObject()` and `::setObject()` is that setObject wil
 
 ```php
 $objects = [
-// line => object
+// line => object / array
     0 => ['name' => 'foo'],
     5 => ['name' => 'bar'],
 ];
@@ -147,6 +147,28 @@ $file->deleteObjects($lines);
 <br><br>
 
 ## Search
+
+The library also provides a way to query the file.  
+Instantiate a new `Search` object, give it conditions and call the `::find()` method, 
+it will return an array of matching objects indexed by their line in the file.
+
+```php
+$search = $file->search();
+$search->condition("object's property", 'value to compare', 'operator');
+$results = $search->find();
+```
+
+<br><br>
+
+**Is null operator**
+
+```php
+$search->condition('title', null, 'IS NULL');
+// Will match entries where the "title" property equals null or is 
+// not defined.
+```
+
+<br><br>
 
 **Equals operator**
 
@@ -225,22 +247,22 @@ $results = $search->find();
 // Will match entries for Iron Maiden from before the yar 2000.
 ```
 
-But you may make it so only one needs to be met.
+But you can make it so that only one needs to be met.
 
 ```php
 $search = $file->search('OR');
 $search
   ->condition('band', 'Blind Guardian', '=')
-  ->condition('band', 'Demons & Wizards, '=');
+  ->condition('band', 'Demons & Wizards', '=');
 $results = $search->find();
-// Will match entries for Either Blind Guardian or Demons & Wizards.
+// Will match entries for both Blind Guardian and Demons & Wizards.
 ```
 
 <br><br>
 
 ### Conditions groups
 
-You may also group conditons.
+You may also group conditons to create complex queries.
 
 ```php
 $search = $file->search('OR');
