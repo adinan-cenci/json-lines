@@ -22,7 +22,7 @@ class File
                 return new FileIterator($this->fileName);
                 break;
             case 'fileName':
-                return new $this->fileName;
+                return $this->fileName;
                 break;
             case 'lineCount':
                 return $this->countLines();
