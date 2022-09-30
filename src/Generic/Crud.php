@@ -185,7 +185,7 @@ class Crud
     protected function getNumberOfLinesToProcess() : int
     {
         if (empty($this->linesToAdd) && empty($this->linesToSet) && empty($this->linesToDelete)) {
-            return max($this->linesToGet);
+            return $this->linesToGet ? max($this->linesToGet) : 0;
         }
 
         return max(
