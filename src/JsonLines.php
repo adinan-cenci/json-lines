@@ -37,7 +37,7 @@ class JsonLines extends File
      */
     public function addObject($object = null, int $line = -1) : void
     {
-        $this->addObjects([$line => $object]);
+        $this->addObjects([$line => $object], $line == -1);
     }
 
     /**
