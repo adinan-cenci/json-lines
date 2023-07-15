@@ -1,7 +1,7 @@
 <?php 
 namespace AdinanCenci\JsonLines;
 
-use AdinanCenci\JsonLines\Generic\FileIterator;
+use AdinanCenci\FileEditor\FileIterator;
 
 class JsonLinesIterator extends FileIterator 
 {

@@ -1,7 +1,7 @@
 <?php 
 namespace AdinanCenci\JsonLines;
 
-use AdinanCenci\JsonLines\Generic\File;
+use AdinanCenci\FileEditor\File;
 use AdinanCenci\JsonLines\Search\Search;
 
 /**

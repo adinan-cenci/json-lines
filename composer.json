@@ -4,6 +4,12 @@
     "type": "library", 
     "keywords": ["json-lines", "json"], 
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/adinan-cenci/file-editor"
+        }
+    ],
     "authors": [
         {
             "name": "Adinan Cenci",
@@ -12,7 +18,8 @@
         }
     ],
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.0",
+        "adinan-cenci/file-editor": "^1.1"
     }, 
     "autoload": {
         "psr-4": {
