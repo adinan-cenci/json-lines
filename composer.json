@@ -4,12 +4,6 @@
     "type": "library", 
     "keywords": ["json-lines", "json"], 
     "license": "MIT",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/adinan-cenci/file-editor"
-        }
-    ],
     "authors": [
         {
             "name": "Adinan Cenci",

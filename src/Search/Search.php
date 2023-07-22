@@ -11,7 +11,7 @@ class Search extends BaseSearch
     public function find() : array
     {
         $results = [];
-        foreach ($this->jsonLines->objects as $line => $object) {
+        foreach ($this->file->objects as $line => $object) {
             if ($object && $this->evaluate($object)) {
                 $results[ $line ] = $object;
             }

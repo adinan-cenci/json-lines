@@ -204,6 +204,16 @@ $search->condition('title', ['foo', 'bar'], 'LIKE');
 
 <br><br>
 
+**Regex operator**
+
+```php
+$search->condition('rating', '#\d stars?#', 'REGEX');
+// Will match entries where the "rating" property matching "#\d stars?#"
+// e.g: "1 star", "2 star", "3 stars" etc ( case insensitive ).
+```
+
+<br><br>
+
 **Number comparison operators**
 
 It also supports "less than", "greater than", "less than or equal", "greater than or equal" and "between".
