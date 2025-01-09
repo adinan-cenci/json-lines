@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace AdinanCenci\JsonLines\Tests;
@@ -7,7 +8,7 @@ use AdinanCenci\JsonLines\JsonLines;
 
 class JsonGetTest extends Base
 {
-    public function testGetObject() 
+    public function testGetObject()
     {
         $file = new JsonLines('./tests/template.jsonl');
         $entry = $file->getObject(0);
@@ -15,7 +16,7 @@ class JsonGetTest extends Base
         $this->assertEquals('Soldiers of the wasteland', $entry->title);
     }
 
-    public function testGetNonExistentOject() 
+    public function testGetNonExistentOject()
     {
         $file = new JsonLines('./tests/template.jsonl');
         $entry = $file->getObject(50);

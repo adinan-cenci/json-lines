@@ -1,13 +1,14 @@
 <?php
+
 declare(strict_types=1);
 
 namespace AdinanCenci\JsonLines\Tests;
 
 use AdinanCenci\JsonLines\JsonLines;
 
-class JsonAddTest extends Base 
+class JsonAddTest extends Base
 {
-    public function testAddSingleObjectToFile() 
+    public function testAddSingleObjectToFile()
     {
         $fileName = 'tests/files/' . __FUNCTION__ . '.jsonl';
         $this->resetTest($fileName, './tests/template.jsonl');
@@ -19,8 +20,7 @@ class JsonAddTest extends Base
         $this->assertEquals(['artist' => 'Alpine Universe', 'title' => 'The Empire of Winds'], $last);
     }
 
-
-    public function testAddMultipleObjectToFile() 
+    public function testAddMultipleObjectToFile()
     {
         $fileName = 'tests/files/' . __FUNCTION__ . '.jsonl';
         $this->resetTest($fileName, './tests/template.jsonl');
@@ -38,7 +38,7 @@ class JsonAddTest extends Base
         ], $last);
     }
 
-    public function testAddObjectsWithGaps() 
+    public function testAddObjectsWithGaps()
     {
         $fileName = 'tests/files/' . __FUNCTION__ . '.jsonl';
         $this->resetTest($fileName, '');

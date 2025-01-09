@@ -1,7 +1,6 @@
 # Json lines
 
 A library to read and write files in the [json lines](https://jsonlines.org/) format.
-**Note**: Still in early development.
 
 <br><br>
 
