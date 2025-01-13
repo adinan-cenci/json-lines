@@ -24,7 +24,7 @@ class JsonGetTest extends Base
         $this->assertEquals(null, $entry);
     }
 
-    public function testGetOjects() 
+    public function testGetOjects()
     {
         $file = new JsonLines('./tests/template.jsonl', true);
         $entries = $file->getObjects([0, 1]);
@@ -33,5 +33,14 @@ class JsonGetTest extends Base
             0 => ['artist' => 'Dragon Force', 'title' => 'Soldiers of the wasteland'],
             1 => ['artist' => 'Kamelot', 'title' => 'Forever'],
         ], $entries);
+    }
+
+    public function testGetRandomObjects()
+    {
+        $file = new JsonLines('./tests/template.jsonl', true);
+
+        $objects = $file->getRandomObjects(5);
+
+        $this->assertEquals(5, count($objects));
     }
 }

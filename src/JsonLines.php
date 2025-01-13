@@ -216,6 +216,31 @@ class JsonLines extends File
     }
 
     /**
+     * Returns random objects from the file.
+     *
+     * @param int $count
+     *   How many lines to return.
+     * @param int|null $from
+     *   Limits the pool of lines available.
+     * @param int|null $to
+     *   Limits the pool of lines available.
+     *
+     * @return string[]
+     *   The lines we retrieved.
+     */
+    public function getRandomObjects(int $count, ?int $from = null, ?int $to = null): array
+    {
+        $lines = $this->getRandomLines($count, $from, $to);
+        $associative = $this->associative;
+
+        array_walk($lines, function (&$content, $lineNumber) use ($associative) {
+            $content = JsonLines::jsonDecode($content, $associative);
+        });
+
+        return $lines;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function search(string $operator = 'AND'): Search
