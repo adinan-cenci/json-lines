@@ -1,13 +1,10 @@
 # Json lines
 
 A library to read and write files in the [json lines](https://jsonlines.org/) format.
-**Note**: Still in early development.
 
 <br><br>
 
-## How to use it
-
-**Instantiating**
+## Instantiating
 
 ```php
 use AdinanCenci\JsonLines\JsonLines;
@@ -20,7 +17,7 @@ $file = new JsonLines('my-file.jsonl', $associative);
 
 <br><br>
 
-**Iterating**
+## Iterating
 
 ```php
 foreach ($file->objects as $line => $object) {
@@ -31,8 +28,9 @@ foreach ($file->objects as $line => $object) {
 
 <br><br>
 
-**Add an object to the end of the file**
+## Editing
 
+### Add an object to the end of the file
 ```php
 $object = ['foo' => 'bar'];
 $file->addObject($object);
@@ -40,9 +38,7 @@ $file->addObject($object);
 
 `$object` does not need to be an array, it also may be an actual object. 
 
-<br><br>
-
-**Add an object to the middle of the file**
+### Add an object to the middle of the file
 
 ```php
 $line = 5;
@@ -52,9 +48,7 @@ $file->addObject($object, $line);
 
 If the file has less than `$line` lines, the gap will be filled with blank lines.
 
-<br><br>
-
-**Add several objects to the end of the file**
+### Add several objects to the end of the file
 
 ```php
 $objects = [
@@ -66,9 +60,7 @@ $objects = [
 $objects->addObjects($objects);
 ```
 
-<br><br>
-
-**Add several objects in the middle of the file**
+### Add several objects in the middle of the file
 
 ```php
 $objects = [
@@ -80,9 +72,7 @@ $objects = [
 $objects->addObjects($objects, false);
 ```
 
-<br><br>
-
-**Set an object**
+### Set an object
 
 ```php
 $line   = 10;
@@ -92,9 +82,7 @@ $file->setObject($line, $object);
 
 The difference between `::addObject()` and `::setObject()` is that `::setObject()` will overwrite whatever is already present at `$line`. 
 
-<br><br>
-
-**Set multiple objects**
+### Set multiple objects
 
 ```php
 $objects = [
@@ -106,9 +94,7 @@ $objects = [
 $objects->setObjects($objects);
 ```
 
-<br><br>
-
-**Retrieve object**
+### Retrieving object
 
 ```php
 $line   = 10;
@@ -117,27 +103,22 @@ $object = $file->getObject($line);
 
 Returns `null` if the entry does not exist or if the json is invalid.
 
-<br><br>
 
-**Retrieve multiple objects**
+### Retrieving multiple objects
 
 ```php
 $lines   = [0, 1, 2];
 $objects = $file->getObjects($lines);
 ```
 
-<br><br>
-
-**Delete objects**
+### Delete objects
 
 ```php
 $line = 10;
 $file->deleteObject($line);
 ```
 
-<br><br>
-
-**Delete multiple objects**
+### Delete multiple objects
 
 ```php
 $lines = [0, 1, 2];
@@ -146,7 +127,7 @@ $file->deleteObjects($lines);
 
 <br><br>
 
-## Search
+## Searching
 
 The library also provides a way to query the file.  
 Instantiate a new `Search` object, give it conditions and call the `::find()` method, 
@@ -158,9 +139,7 @@ $search->condition("object's property", 'value to compare', 'operator');
 $results = $search->find();
 ```
 
-<br><br>
-
-**Is null operator**
+### Is null operator
 
 ```php
 $search->condition('title', null, 'IS NULL');
@@ -168,9 +147,7 @@ $search->condition('title', null, 'IS NULL');
 // not defined.
 ```
 
-<br><br>
-
-**Equals operator**
+### Equals operator
 
 ```php
 $search->condition('title', 'Iliad', '=');
@@ -178,9 +155,7 @@ $search->condition('title', 'Iliad', '=');
 // ( case insensitive ).
 ```
 
-<br><br>
-
-**In operator**
+### In operator
 
 ```php
 $search->condition('title', ['Iliad', ' Odyssey'], 'IN');
@@ -188,9 +163,7 @@ $search->condition('title', ['Iliad', ' Odyssey'], 'IN');
 // "Iliad" or "Odyssey" ( case insensitive ).
 ```
 
-<br><br>
-
-**Like operator**
+### Like operator
 
 ```php
 $search->condition('title', 'foo', 'LIKE');
@@ -202,9 +175,7 @@ $search->condition('title', ['foo', 'bar'], 'LIKE');
 // "fool", "barrier", "barista" etc.
 ```
 
-<br><br>
-
-**Regex operator**
+### Regex operator
 
 ```php
 $search->condition('rating', '#\d stars?#', 'REGEX');
@@ -212,9 +183,7 @@ $search->condition('rating', '#\d stars?#', 'REGEX');
 // e.g: "1 star", "2 star", "3 stars" etc ( case insensitive ).
 ```
 
-<br><br>
-
-**Number comparison operators**
+### Number comparison operators
 
 It also supports "less than", "greater than", "less than or equal", "greater than or equal" and "between".
 
@@ -227,8 +196,6 @@ $search
   ->condition('price', [10, 50], 'BETWEEN');
 ```
 
-<br><br>
-
 ### Negating operators
 
 You may also negate the operators.
@@ -240,8 +207,6 @@ $search
   ->condition('price', [10, 50], 'NOT BETWEEN')
   ->condition('title', ['foo', 'bar'], 'UNLIKE');
 ```
-
-<br><br>
 
 ### Multiple conditions
 
@@ -268,8 +233,6 @@ $results = $search->find();
 // Will match entries for both Blind Guardian and Demons & Wizards.
 ```
 
-<br><br>
-
 ### Conditions groups
 
 You may also group conditons to create complex queries.
@@ -288,6 +251,18 @@ $search->andConditionGroup()
 $results = $search->find();
 // Will match entries for Angra from before 2010 OR
 // entries for Almah from after 2013
+```
+
+### Order
+You may also order the results by different properties.
+
+```php
+$search = $file->search();
+
+$search->orderBy('title', 'ASC');
+// Order search results by the title property alphabetically.
+$search->orderBY('description', 'DESC');
+// Order results by the description decrescently.
 ```
 
 <br><br>

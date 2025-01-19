@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=7.0",
-        "adinan-cenci/file-editor": "^1.1"
+        "adinan-cenci/file-editor": "^2.0"
     }, 
     "autoload": {
         "psr-4": {
