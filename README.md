@@ -265,6 +265,7 @@ $search->orderBY('description', 'DESC');
 // Order results by the description decrescently.
 ```
 
+<br><br>
 
 ## License
 
