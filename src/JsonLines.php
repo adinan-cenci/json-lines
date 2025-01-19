@@ -27,6 +27,8 @@ class JsonLines extends File
     protected bool $associative = false;
 
     /**
+     * Constructor.
+     *
      * @param string $fileName
      *   Absolute path to the file.
      * @param bool $associative
@@ -75,9 +77,9 @@ class JsonLines extends File
      *   The position in the file.
      *   If not informed the object will be added to the end of the file.
      *
-     * @throws DirectoryDoesNotExist
-     * @throws DirectoryIsNotWritable
-     * @throws FileIsNotWritable
+     * @throws AdinanCenci\FileEditor\Exception\DirectoryDoesNotExist
+     * @throws AdinanCenci\FileEditor\Exception\DirectoryIsNotWritable
+     * @throws AdinanCenci\FileEditor\Exception\FileIsNotWritable
      */
     public function addObject($object = null, int $line = -1): void
     {
@@ -93,9 +95,9 @@ class JsonLines extends File
      *   If true, the objects will be added to the end of the file,
      *   otherwise their positions in the file will reflect their array keys.
      *
-     * @throws DirectoryDoesNotExist
-     * @throws DirectoryIsNotWritable
-     * @throws FileIsNotWritable
+     * @throws AdinanCenci\FileEditor\Exception\DirectoryDoesNotExist
+     * @throws AdinanCenci\FileEditor\Exception\DirectoryIsNotWritable
+     * @throws AdinanCenci\FileEditor\Exception\FileIsNotWritable
      */
     public function addObjects(array $objects, bool $toTheEndOfTheFile = true): void
     {
@@ -116,9 +118,9 @@ class JsonLines extends File
      * @param int $line
      *   The position in the file.
      *
-     * @throws DirectoryDoesNotExist
-     * @throws DirectoryIsNotWritable
-     * @throws FileIsNotWritable
+     * @throws AdinanCenci\FileEditor\Exception\DirectoryDoesNotExist
+     * @throws AdinanCenci\FileEditor\Exception\DirectoryIsNotWritable
+     * @throws AdinanCenci\FileEditor\Exception\FileIsNotWritable
      */
     public function setObject(int $line, $object): void
     {
@@ -133,9 +135,9 @@ class JsonLines extends File
      * @param array $objects
      *   An numerical array: [ lineNumber => object ].
      *
-     * @throws DirectoryDoesNotExist
-     * @throws DirectoryIsNotWritable
-     * @throws FileIsNotWritable
+     * @throws AdinanCenci\FileEditor\Exception\DirectoryDoesNotExist
+     * @throws AdinanCenci\FileEditor\Exception\DirectoryIsNotWritable
+     * @throws AdinanCenci\FileEditor\Exception\FileIsNotWritable
      */
     public function setObjects(array $objects): void
     {
@@ -155,8 +157,8 @@ class JsonLines extends File
      * @return array|object|null
      *   The decoded object, null if the line cannot be decoded.
      *
-     * @throws FileDoesNotExist
-     * @throws FileIsNotReadable
+     * @throws AdinanCenci\FileEditor\Exception\FileDoesNotExist
+     * @throws AdinanCenci\FileEditor\Exception\FileIsNotReadable
      */
     public function getObject(int $line)
     {
@@ -173,8 +175,8 @@ class JsonLines extends File
      * @return (array|object|null)[]
      *   The objects in the specified lines.
      *
-     * @throws FileDoesNotExist
-     * @throws FileIsNotReadable
+     * @throws AdinanCenci\FileEditor\Exception\FileDoesNotExist
+     * @throws AdinanCenci\FileEditor\Exception\FileIsNotReadable
      */
     public function getObjects(array $lines): array
     {
@@ -193,8 +195,8 @@ class JsonLines extends File
      * @param int $line
      *   The line to be erased.
      *
-     * @throws FileDoesNotExist
-     * @throws FileIsNotReadable
+     * @throws AdinanCenci\FileEditor\Exception\FileDoesNotExist
+     * @throws AdinanCenci\FileEditor\Exception\FileIsNotReadable
      */
     public function deleteObject(int $line): void
     {
@@ -207,8 +209,8 @@ class JsonLines extends File
      * @param int[] $lines
      *   Array of line numbers.
      *
-     * @throws FileDoesNotExist
-     * @throws FileIsNotReadable
+     * @throws AdinanCenci\FileEditor\Exception\FileDoesNotExist
+     * @throws AdinanCenci\FileEditor\Exception\FileIsNotReadable
      */
     public function deleteObjects(array $lines): void
     {
@@ -225,8 +227,8 @@ class JsonLines extends File
      * @param int|null $to
      *   Limits the pool of lines available.
      *
-     * @return string[]
-     *   The lines we retrieved.
+     * @return (array|\stdClass)[]
+     *   The objects we retrieved.
      */
     public function getRandomObjects(int $count, ?int $from = null, ?int $to = null): array
     {
