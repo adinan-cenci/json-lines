@@ -6,8 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [3.0.0] - 2023-07-21
+## [3.1.0] - 2025-01-19
+### Added
+- `JsonLines::getRandomObjects()` to retrieve random objects.
+- [Issue 2](https://github.com/adinan-cenci/json-lines/issues/2): `Search::orderBy()` to order search results.
 
+---
+
+## [3.0.0] - 2023-07-21
 ### Changed
 - Exceptions changed namespace to `AdinanCenci\FileEditor\Exception`.
 
