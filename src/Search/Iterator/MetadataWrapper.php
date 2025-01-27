@@ -24,6 +24,15 @@ class MetadataWrapper extends LineWrapper implements MetadataWrapperInterface
         $this->data = $data;
     }
 
+    public function __toString(): string
+    {
+        if (is_array($this->data) || $this->data instanceof \stdClass) {
+            return json_encode($this->data);
+        }
+
+        return (string) $this->data;
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -38,7 +38,7 @@ class JsonSearchTest extends Base
         $this->assertEquals('Into Each Life Some Rain Must Fall', end($results)->title);
     }
 
-    public function testOrderSearchResults()
+    public function testOrderSearchResultsByProperty()
     {
         $file = new JsonLines('./tests/template-search.jsonl');
         $search = $file->search();
@@ -56,5 +56,42 @@ class JsonSearchTest extends Base
 
         $this->assertEquals('Angus Mcfife', reset($results)->title);
         $this->assertEquals('The Bard\'s song', end($results)->title);
+    }
+
+    public function testOrderSearchResultsRandomly()
+    {
+        $file = new JsonLines('./tests/template-search.jsonl');
+
+        $search1 = $file->search();
+        $search1->orderRandomly();
+        $results1 = $search1->find();
+
+        $search2 = $file->search();
+        $search2->orderRandomly();
+        $results2 = $search2->find();
+
+        $first1 = reset($results1);
+        $first2 = reset($results2);
+
+        $this->assertNotEquals($first1->title, $first2->title);
+    }
+
+    public function testOrderSearchResultsRandomlyWithSeed()
+    {
+        $file = new JsonLines('./tests/template-search.jsonl');
+        $seed = 'foo-bar' . rand(0, 1000);
+
+        $search1 = $file->search();
+        $search1->orderRandomly($seed);
+        $results1 = $search1->find();
+
+        $search2 = $file->search();
+        $search2->orderRandomly($seed);
+        $results2 = $search2->find();
+
+        $first1 = reset($results1);
+        $first2 = reset($results2);
+
+        $this->assertEquals($first1->title, $first2->title);
     }
 }
