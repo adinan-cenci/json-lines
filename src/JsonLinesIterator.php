@@ -29,7 +29,7 @@ class JsonLinesIterator extends FileIterator
     /**
      * \Iterator::current()
      */
-    public function current()
+    public function current(): mixed
     {
         if (! $this->getHandle()) {
             return null;

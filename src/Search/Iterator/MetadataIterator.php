@@ -13,7 +13,7 @@ class MetadataIterator extends JsonLinesIterator implements \Iterator
     /**
      * \Iterator::current()
      */
-    public function current()
+    public function current(): mixed
     {
         if (! $this->getHandle()) {
             return null;
