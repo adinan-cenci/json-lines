@@ -2,7 +2,7 @@
 
 namespace AdinanCenci\JsonLines\Search;
 
-use AdinanCenci\JsonLines\Search\Iterator\MetadataIterator;
+use AdinanCenci\JsonLines\Search\Iterator\DataIterator;
 use AdinanCenci\FileEditor\Search\Search as FileSearch;
 
 class Search extends FileSearch
@@ -25,6 +25,11 @@ class Search extends FileSearch
      */
     protected function getIterator(): \Iterator
     {
-        return new MetadataIterator($this->file->fileName, $this->file->associative);
+        return new DataIterator(
+            $this->file->fileName,
+            $this->file->associative,
+            $this->metadataEagerGetters,
+            $this->metadataLazyGetters,
+        );
     }
 }
