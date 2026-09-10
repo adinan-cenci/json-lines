@@ -94,4 +94,26 @@ class JsonSearchTest extends Base
 
         $this->assertEquals($first1->title, $first2->title);
     }
+
+    public function testDefineMetadata()
+    {
+        $file = new JsonLines('./tests/template-search.jsonl');
+        $search = $file->search();
+
+        $search->setMetadataLazyGetter('age', function ($dataWrapper) {
+            if (!$dataWrapper->data->release) {
+                return null;
+            }
+
+            $release = \DateTime::createFromFormat('Y', $dataWrapper->data->release);
+            $today = new \DateTime();
+
+            return $today->diff($release)->y;
+        });
+
+        $search->condition(['@metadata', 'age'], 50, '>');
+
+        $oldies = $search->find();
+        $this->assertEquals(5, count($oldies));
+    }
 }

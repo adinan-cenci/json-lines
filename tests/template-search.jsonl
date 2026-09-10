@@ -1,13 +1,13 @@
-{"artist":"Beast in Black","title":"Sweet True Lies","genre":"Metal","score":1}
-{"artist":"Beast in Black","title":"Repentless","genre":"Metal","score":2}
-{"artist":"Van Canto","title":"The Bard's song","genre":"Metal","cover":"Blind Guardian","score":3}
+{"artist":"Beast in Black","title":"Sweet True Lies","genre":"Metal","score":1,"release":"2019"}
+{"artist":"Beast in Black","title":"Repentless","genre":"Metal","score":2,"release":"2019"}
+{"artist":"Van Canto","title":"The Bard's song","genre":"Metal","cover":"Blind Guardian","score":3,"release":"2008"}
 
-{"artist":"Blind Guardian","title":"The Bard's Song","genre":"Metal","score":4}
-{"artist":"Blind Guardian","title":"Nightfall","genre":"Metal","score":5}
-{"artist":"Roy Brown","title":"Big Town","genre":"Jazz","score":6}
+{"artist":"Blind Guardian","title":"The Bard's Song","genre":"Metal","score":4,"release":"2003"}
+{"artist":"Blind Guardian","title":"Nightfall","genre":"Metal","score":5,"release":"1998"}
+{"artist":"Roy Brown","title":"Big Town","genre":"Jazz","score":6,"release":"1951"}
 
-{"artist":"Roy Brown","title":"Mighty, Mighty Man","genre":"Jazz","score":7}
-{"artist":"Teddy Wilson, Billie Holiday","title":"Easy Living","genre":"Jazz","source":{"youtube":"RX7TA3ezjHc"},"score":8}
-{"artist":"Ella Fitzgerald","title":"Into Each Life Some Rain Must Fall","genre":"Jazz","source":{"youtube":"PJ9IaplRrm4"},"score":9}
-{"artist":"Gloryhammer","title":"Angus Mcfife","genre":"Metal"}
-{"artist":"Billie Holiday","title":"Crazy He Calls Me","genre":"Jazz"}
+{"artist":"Roy Brown","title":"Mighty, Mighty Man","genre":"Jazz","score":7,"release":"1947"}
+{"artist":"Teddy Wilson, Billie Holiday","title":"Easy Living","genre":"Jazz","source":{"youtube":"RX7TA3ezjHc"},"score":8,"release":"1937"}
+{"artist":"Ella Fitzgerald","title":"Into Each Life Some Rain Must Fall","genre":"Jazz","source":{"youtube":"PJ9IaplRrm4"},"score":9,"release":"1944"}
+{"artist":"Gloryhammer","title":"Angus Mcfife","genre":"Metal","release":"2013"}
+{"artist":"Billie Holiday","title":"Crazy He Calls Me","genre":"Jazz","release":"1949"}
