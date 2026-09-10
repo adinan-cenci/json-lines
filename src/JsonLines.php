@@ -10,7 +10,7 @@ use AdinanCenci\JsonLines\Search\Search;
  *   Iterator object to read the objects line by line.
  * @property bool $associative
  *   Wether the objects are returned as associative arrays or objects.
- * @property string $fileName
+ * @property string $filename
  *   The filename.
  * @property FileIterator $lines
  *   Iterator object to read the file line by line.
@@ -29,15 +29,15 @@ class JsonLines extends File
     /**
      * Constructor.
      *
-     * @param string $fileName
+     * @param string $filename
      *   Absolute path to the file.
      * @param bool $associative
      *   If true, JSON objects will be returned as associative arrays,
      *   otherwise they will be returned as objects.
      */
-    public function __construct(string $fileName, bool $associative = false)
+    public function __construct(string $filename, bool $associative = false)
     {
-        parent::__construct($fileName);
+        parent::__construct($filename);
         $this->associative = $associative;
     }
 
@@ -65,7 +65,7 @@ class JsonLines extends File
      */
     public function objects(): \Iterator
     {
-        return new JsonLinesIterator($this->fileName, $this->associative);
+        return new JsonLinesIterator($this->filename, $this->associative);
     }
 
     /**

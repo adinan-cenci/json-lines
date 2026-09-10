@@ -10,10 +10,10 @@ class JsonAddTest extends Base
 {
     public function testAddSingleObjectToFile()
     {
-        $fileName = 'tests/files/' . __FUNCTION__ . '.jsonl';
-        $this->resetTest($fileName, './tests/template.jsonl');
+        $filename = 'tests/files/' . __FUNCTION__ . '.jsonl';
+        $this->resetTest($filename, './tests/template.jsonl');
 
-        $file = new JsonLines($fileName, true);
+        $file = new JsonLines($filename, true);
         $file->addObject(['artist' => 'Alpine Universe', 'title' => 'The Empire of Winds']);
 
         $last = $file->getObject(7);
@@ -22,10 +22,10 @@ class JsonAddTest extends Base
 
     public function testAddMultipleObjectToFile()
     {
-        $fileName = 'tests/files/' . __FUNCTION__ . '.jsonl';
-        $this->resetTest($fileName, './tests/template.jsonl');
+        $filename = 'tests/files/' . __FUNCTION__ . '.jsonl';
+        $this->resetTest($filename, './tests/template.jsonl');
 
-        $file = new JsonLines($fileName, true);
+        $file = new JsonLines($filename, true);
         $file->addObjects([
             ['artist' => 'Atlantean Kodex', 'title' => 'Sol Invictus'],
             ['artist' => 'Space Cadets', 'title' => 'Kill All Xenos']
@@ -40,10 +40,10 @@ class JsonAddTest extends Base
 
     public function testAddObjectsWithGaps()
     {
-        $fileName = 'tests/files/' . __FUNCTION__ . '.jsonl';
-        $this->resetTest($fileName, '');
+        $filename = 'tests/files/' . __FUNCTION__ . '.jsonl';
+        $this->resetTest($filename, '');
 
-        $file = new JsonLines($fileName, true);
+        $file = new JsonLines($filename, true);
 
         $file->addObjects([
             0 => ['artist' => 'Dreamtale', 'title' => 'Angel of Light'],

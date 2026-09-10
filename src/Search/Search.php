@@ -26,7 +26,7 @@ class Search extends FileSearch
     protected function getIterator(): \Iterator
     {
         return new DataIterator(
-            $this->file->fileName,
+            $this->file->filename,
             $this->file->associative,
             $this->metadataEagerGetters,
             $this->metadataLazyGetters,

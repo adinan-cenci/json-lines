@@ -10,10 +10,10 @@ class JsonDeleteTest extends Base
 {
     public function testDeleteSingleObject() 
     {
-        $fileName = 'tests/files/' . __FUNCTION__ . '.jsonl';
-        $this->resetTest($fileName, './tests/template.jsonl');
+        $filename = 'tests/files/' . __FUNCTION__ . '.jsonl';
+        $this->resetTest($filename, './tests/template.jsonl');
 
-        $file = new JsonLines($fileName, true);
+        $file = new JsonLines($filename, true);
         $file->deleteObject(2);
 
         $third = $file->getObject(2);
@@ -22,10 +22,10 @@ class JsonDeleteTest extends Base
 
     public function testDeleteMultipleObjects() 
     {
-        $fileName = 'tests/files/' . __FUNCTION__ . '.jsonl';
-        $this->resetTest($fileName, './tests/template.jsonl');
+        $filename = 'tests/files/' . __FUNCTION__ . '.jsonl';
+        $this->resetTest($filename, './tests/template.jsonl');
 
-        $file = new JsonLines($fileName, true);
+        $file = new JsonLines($filename, true);
         $file->deleteObjects([0, 2]);
 
         $lines = $file->getObjects([0, 1]);
