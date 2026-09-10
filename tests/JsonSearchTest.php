@@ -95,7 +95,7 @@ class JsonSearchTest extends Base
         $this->assertEquals($first1->title, $first2->title);
     }
 
-    public function testDefineMetadata()
+    public function testDefineCustomMetadataAndFilter()
     {
         $file = new JsonLines('./tests/template-search.jsonl');
         $search = $file->search();
