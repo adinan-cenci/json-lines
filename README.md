@@ -265,6 +265,43 @@ $search->orderBY('description', 'DESC');
 // Order results by the description decrescently.
 ```
 
+### Metadata
+
+Lastly we have metadata. Adjacent information that can be used in our search.
+
+Out of the box the library offers: `['@metadata', 'lineNumber']`, but custom 
+metadata can be defined by invoking `::setMetadataEagerGetter()` and 
+`::setMetadataLazyGetter()`, making them available to our search.
+
+Naturally, the metadata must be defined before calling `::find()`.
+
+Lazy getters are invoked as needed during evaluation in the search loop.
+
+Eager getters are invoked right away inside the search loop.
+
+Some examples:
+
+This will register the `['@metadata', 'evenLine']` metadata, allowing us to 
+filter only even lines.
+
+```php
+$search->setMetadataEagerGetter('evenLine', function ($iterator, $dataWrapper) {
+  return $iterator->currentLine == 0 || $iterator->currentLine % 2 == 0;
+});
+```
+
+Another, suppose the objects in your file contains a date of birth, we can
+filter by age by defining the `['@metadata', 'age']` like so:
+
+```php
+$search->setMetadataLazyGetter('age', function ($dataWrapper) {
+  $dob = new \DateTime($dataWrapper->data->dob);
+  $today = new \DateTime();
+
+  return $today->diff($dob)->y;
+});
+```
+
 <br><br>
 
 ## License
